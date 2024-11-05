@@ -146,6 +146,7 @@
     <None Include="text.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="blabla.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="BaseCharacter.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Turtle.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="blabla.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="BaseCharacter.cpp" />
