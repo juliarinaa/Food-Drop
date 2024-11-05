@@ -214,6 +214,7 @@
     <ClCompile Include="MainMenuScreen.cpp" />
     <ClCompile Include="Music.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
+    <ClCompile Include="punyajulia.cpp" />
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="SATCollision.cpp" />
     <ClCompile Include="Screen.cpp" />
