@@ -22,10 +22,10 @@ int main(int argc, char** argv) {
 	Engine::Setting* setting = new Engine::Setting();
 	setting->screenWidth = 1600;
 	setting->screenHeight = 900;
-	setting->windowFlag = Engine::WindowFlag::WINDOWED;
+	setting->windowFlag = Engine::WindowFlag::FULLSCREEN;
 	setting->vsync = false;
 	setting->targetFrameRate = 75;
-	Engine::Game* game = new Engine::Lesson01_BgColor(setting);
+	Engine::Game* game = new Engine::CookNCollect(setting);
 	game->Run();
 	delete setting;
 	delete game;

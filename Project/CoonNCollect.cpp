@@ -8,10 +8,22 @@ Engine::CookNCollect::CookNCollect(Setting* setting) :Engine::Game(setting)
 Engine::CookNCollect::~CookNCollect()
 {
 	delete texture;
+	delete basketTexture;
+	delete basketSprite;
 }
 
 void Engine::CookNCollect::Init()
 {
+	// Basket
+	texture = new Texture("basket.png");
+	basketSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetScale(0.3);
+	basketSprite->SetPosition(setting->screenWidth / 2 - basketSprite->GetScaleWidth() / 2, 0);
+
+	inputManager->AddInputMapping("slide-left", SDLK_LEFT)->AddInputMapping("slide-right", SDLK_RIGHT);
+
+	minXBasket = (int)(setting->screenWidth / 3);
+	maxXBasket = (int)(setting->screenWidth * 2 / 3 - basketSprite->GetScaleWidth());
+
 	// Spawn setting
 	maxSpawnTime = 1000;
 	numObjectPerSpawn = 1;
@@ -35,6 +47,26 @@ void Engine::CookNCollect::Update()
 	if (inputManager->IsKeyReleased("quit")) {
 		state = Engine::State::EXIT;
 	}
+
+	// basket movement -> berdasarkan lesson 05
+	float x = basketSprite->GetPosition().x;
+	float y = basketSprite->GetPosition().y;
+	float velocity = 0.4f;
+	// s = v * t;
+	if (inputManager->IsKeyPressed("slide-right")) {
+		if (x <= maxXBasket) {
+			x += velocity * GetGameTime();
+			basketSprite->SetPosition(x, y)->Update(GetGameTime());
+		}
+	}
+
+	if (inputManager->IsKeyPressed("slide-left")) {
+		if (x >= minXBasket) {
+			x -= velocity * GetGameTime();
+			basketSprite->SetPosition(x, y)->Update(GetGameTime());
+		}
+	}
+
 	// Time to spawn objects
 	if (spawnDuration >= maxSpawnTime) {
 		SpawnObjects();
@@ -54,6 +86,7 @@ void Engine::CookNCollect::Render()
 	for (Ingredients* o : objects) {
 		o->Draw();
 	}
+	basketSprite->Draw();
 }
 
 /*
