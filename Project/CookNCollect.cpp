@@ -10,6 +10,7 @@ Engine::CookNCollect::~CookNCollect()
 	delete texture;
 	delete basketTexture;
 	delete basketSprite;
+	delete scoreText;
 }
 
 void Engine::CookNCollect::Init()
@@ -40,6 +41,10 @@ void Engine::CookNCollect::Init()
 
 	// Add input
 	inputManager->AddInputMapping("quit", SDLK_ESCAPE);
+	
+	// Score text setting
+	scoreText = new Text("lucon.ttf", 35, defaultTextShader);
+	scoreText->SetScale(1.0f)->SetColor(255, 255, 255)->SetPosition(20, setting->screenHeight - (scoreText->GetFontSize() * scoreText->GetScale())-18);
 }
 
 void Engine::CookNCollect::Update()
@@ -75,9 +80,16 @@ void Engine::CookNCollect::Update()
 	// Update all objects
 	for (Ingredients* o : objects) {
 		o->Update(GetGameTime());
+		if (o->GetY() < basketSprite->GetScaleHeight()) {
+			if (o->GetBoundingBox()->CollideWith(basketSprite->GetBoundingBox())) {
+				score += 1;
+			}
+		}
 	}
 	// Count spawn duration
 	spawnDuration += GetGameTime();
+
+	scoreText->SetText("Score: " + FormatScore(score, 5));
 }
 
 void Engine::CookNCollect::Render()
@@ -87,6 +99,7 @@ void Engine::CookNCollect::Render()
 		o->Draw();
 	}
 	basketSprite->Draw();
+	scoreText->Draw();
 }
 
 /*
@@ -121,6 +134,12 @@ void Engine::CookNCollect::SpawnObjects()
 			spawnCount++;
 		}
 	}
+}
+
+string  Engine::CookNCollect::FormatScore(int score, int width) {
+	ostringstream oss;
+	oss << std::setfill('0') << std::setw(width) << score;
+	return oss.str();
 }
 
 

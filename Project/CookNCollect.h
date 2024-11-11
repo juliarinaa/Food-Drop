@@ -6,7 +6,10 @@
 #include "Texture.h"
 #include "Sprite.h"
 #include "Ingredients.h"
+#include "Text.h"
 #include <vector>
+#include <sstream>
+#include <iomanip>
 
 namespace Engine {
 	class CookNCollect :public Engine::Game
@@ -32,6 +35,9 @@ namespace Engine {
 			numObjectPerSpawn = 0,
 			minXBasket = 0,
 			maxXBasket = 0;
+		Text* scoreText = NULL;
+		string FormatScore(int score, int width);
+		int score = 0;
 	};
 }
 #endif

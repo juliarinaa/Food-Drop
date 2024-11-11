@@ -7,6 +7,7 @@ namespace Engine {
 	enum class IngredientsState {
 		SPAWN,
 		GROUND,
+		CATCHED,
 		DIE
 	};
 	class Ingredients
@@ -24,6 +25,7 @@ namespace Engine {
 		float GetX();
 		float GetY();
 		Ingredients* SetFrame(int frameIndex);
+		BoundingBox* GetBoundingBox();
 	protected:
 		Sprite* sprite = NULL;
 		IngredientsState state;

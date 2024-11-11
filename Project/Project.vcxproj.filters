@@ -256,13 +256,16 @@
     <ClCompile Include="Lesson11_ParallaxScrolling.cpp">
       <Filter>Demo Files</Filter>
     </ClCompile>
-    <ClCompile Include="CoonNCollect.cpp">
+    <ClCompile Include="CookNCollect.cpp">
       <Filter>Demo Files</Filter>
     </ClCompile>
     <ClCompile Include="Ingredients.cpp">
       <Filter>Demo Files</Filter>
     </ClCompile>
     <ClCompile Include="blabla.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="punyajulia.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
