@@ -190,7 +190,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="BaseCharacter.cpp" />
-    <ClCompile Include="CoonNCollect.cpp" />
+    <ClCompile Include="CookNCollect.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Ingredients.cpp" />
     <ClCompile Include="Lesson11_ParallaxScrolling.cpp" />

@@ -5,7 +5,7 @@ Engine::Ingredients::Ingredients(Sprite* sprite)
 	this->sprite = sprite;
 	state = Engine::IngredientsState::DIE;
 	groundDur = 0;
-	groundTime = 3000;
+	groundTime = 0;
 }
 
 Engine::Ingredients::~Ingredients()
@@ -93,6 +93,13 @@ Engine::Ingredients* Engine::Ingredients::SetFrame(int frameIndex) {
 	sprite->SetFrame(frameIndex);
 	return this;
 }
+
+Engine::BoundingBox* Engine::Ingredients::GetBoundingBox() 
+{
+	return sprite->GetBoundingBox();
+}
+
+
 
 
 
