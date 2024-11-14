@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
 	setting->windowFlag = Engine::WindowFlag::FULLSCREEN;
 	setting->vsync = false;
 	setting->targetFrameRate = 75;
-	Engine::Game* game = new Engine::CookNCollect(setting);
+	Engine::Game* game = new Engine::LessonAI02_NPCWave(setting);
 	game->Run();
 	delete setting;
 	delete game;
