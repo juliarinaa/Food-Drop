@@ -25,17 +25,28 @@ void Engine::CookNCollect::Init()
 	minXBasket = (int)(setting->screenWidth / 3);
 	maxXBasket = (int)(setting->screenWidth * 2 / 3 - basketSprite->GetScaleWidth());
 
+	// dot buat debugging aj
+	dotTexture = new Texture("dot.png");
+	dot = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
+	dot->SetPosition((int)setting->screenWidth / 2, basketSprite->GetScaleHeight() - 5);
+
+	dotSprite1 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
+	dotSprite2 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
+	dotSprite3 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
+	dotSprite4 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
+	
 	// Spawn setting
 	maxSpawnTime = 1000;
 	numObjectPerSpawn = 1;
 	numObjectsInPool = 100;
 
-	// Load a texture
+	// Load ingredient texture
 	texture = new Texture("foods.png");
 	for (int i = 0; i < numObjectsInPool; i++) {
 		Ingredients* o = new Ingredients(CreateSprite());
 		objects.push_back(o);
 	}
+
 	// Set background
 	SetBackgroundColor(201, 130, 130);
 
@@ -43,53 +54,85 @@ void Engine::CookNCollect::Init()
 	inputManager->AddInputMapping("quit", SDLK_ESCAPE);
 	
 	// Score text setting
-	scoreText = new Text("lucon.ttf", 35, defaultTextShader);
-	scoreText->SetScale(1.0f)->SetColor(255, 255, 255)->SetPosition(20, setting->screenHeight - (scoreText->GetFontSize() * scoreText->GetScale())-18);
+	scoreText = new Text("ARCADECLASSIC.ttf", 40, defaultTextShader);
+	scoreText->SetColor(255, 255, 255)->SetPosition(25, setting->screenHeight - scoreText->GetFontSize() - 5);
+	scoreText->SetText("0000000");
+
+	//load heart texture
+	texture = new Texture("heart.png");
+	for (int i = 0; i < 3; i++) {
+		Sprite* o = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(5)->SetNumYFrames(1)->AddAnimation("gone", 0, 4)->SetScale(2.5)->SetAnimationDuration(100);
+		lifes.push_back(o);
+	}
+
+	// set heart position
+	for (size_t i = 0; i < 3; i++)
+	{
+		lifes[i]->SetPosition(setting->screenWidth - (i + 1) * lifes[i]->GetScaleWidth() - (25 + i*10), setting->screenHeight - lifes[i]->GetScaleHeight()-25);
+	}
 }
 
 void Engine::CookNCollect::Update()
 {
-	if (inputManager->IsKeyReleased("quit")) {
-		state = Engine::State::EXIT;
-	}
 
-	// basket movement -> berdasarkan lesson 05
-	float x = basketSprite->GetPosition().x;
-	float y = basketSprite->GetPosition().y;
-	float velocity = 0.4f;
-	// s = v * t;
-	if (inputManager->IsKeyPressed("slide-right")) {
-		if (x <= maxXBasket) {
-			x += velocity * GetGameTime();
-			basketSprite->SetPosition(x, y)->Update(GetGameTime());
+	if (!gameOver) {
+		// quit button
+		if (inputManager->IsKeyReleased("quit")) {
+			state = Engine::State::EXIT;
 		}
-	}
 
-	if (inputManager->IsKeyPressed("slide-left")) {
-		if (x >= minXBasket) {
-			x -= velocity * GetGameTime();
-			basketSprite->SetPosition(x, y)->Update(GetGameTime());
-		}
-	}
-
-	// Time to spawn objects
-	if (spawnDuration >= maxSpawnTime) {
-		SpawnObjects();
-		spawnDuration = 0;
-	}
-	// Update all objects
-	for (Ingredients* o : objects) {
-		o->Update(GetGameTime());
-		if (o->GetY() < basketSprite->GetScaleHeight()) {
-			if (o->GetBoundingBox()->CollideWith(basketSprite->GetBoundingBox())) {
-				score += 1;
+		// Update all objects
+		for (Ingredients* o : objects) {
+			o->Update(GetGameTime());
+			// detect coallision and update score
+			if (o->GetY() <= basketSprite->GetScaleHeight() && o->GetY() >= (basketSprite->GetScaleHeight() - 5) && o->IsSpawn()) {
+				if (o->GetBoundingBox()->CollideWith(basketSprite->GetBoundingBox())) {
+					score += 100;
+					scoreText->SetText(FormatScore(score));
+					o->SetCatched();
+				}
 			}
 		}
-	}
-	// Count spawn duration
-	spawnDuration += GetGameTime();
 
-	scoreText->SetText("Score: " + FormatScore(score, 5));
+		// basket movement -> berdasarkan lesson 05
+		float x = basketSprite->GetPosition().x;
+		float y = basketSprite->GetPosition().y;
+		float velocity = 0.4f;
+		// s = v * t;
+		if (inputManager->IsKeyPressed("slide-right")) {
+			if (x <= maxXBasket) {
+				x += velocity * GetGameTime();
+				basketSprite->SetPosition(x, y)->Update(GetGameTime());
+			}
+		}
+
+		if (inputManager->IsKeyPressed("slide-left")) {
+			if (x >= minXBasket) {
+				x -= velocity * GetGameTime();
+				basketSprite->SetPosition(x, y)->Update(GetGameTime());
+			}
+		}
+
+		// Time to spawn objects
+		if (spawnDuration >= maxSpawnTime) {
+			SpawnObjects();
+			spawnDuration = 0;
+		}
+
+		// Count spawn duration
+		spawnDuration += GetGameTime();
+	}
+
+	//Shape for debug
+	BoundingBox* bb = objects[1]->GetBoundingBox();
+	dotSprite1->SetPosition(bb->GetVertices()[0].x - (0.5f * dotSprite1->GetScaleWidth()),
+		bb->GetVertices()[0].y - (0.5f * dotSprite1->GetScaleHeight()));
+	dotSprite2->SetPosition(bb->GetVertices()[1].x - (0.5f * dotSprite2->GetScaleWidth()),
+		bb->GetVertices()[1].y - (0.5f * dotSprite2->GetScaleHeight()));
+	dotSprite3->SetPosition(bb->GetVertices()[2].x - (0.5f * dotSprite3->GetScaleWidth()),
+		bb->GetVertices()[2].y - (0.5f * dotSprite3->GetScaleHeight()));
+	dotSprite4->SetPosition(bb->GetVertices()[3].x - (0.5f * dotSprite4->GetScaleWidth()),
+		bb->GetVertices()[3].y - (0.5f * dotSprite3->GetScaleHeight()));
 }
 
 void Engine::CookNCollect::Render()
@@ -98,8 +141,17 @@ void Engine::CookNCollect::Render()
 	for (Ingredients* o : objects) {
 		o->Draw();
 	}
+	for (Sprite* o : lifes) {
+		o->Draw();
+	}
 	basketSprite->Draw();
 	scoreText->Draw();
+	dot->Draw();
+
+	dotSprite1->Draw();
+	dotSprite2->Draw();
+	dotSprite3->Draw();
+	dotSprite4->Draw();
 }
 
 /*
@@ -136,9 +188,9 @@ void Engine::CookNCollect::SpawnObjects()
 	}
 }
 
-string  Engine::CookNCollect::FormatScore(int score, int width) {
+string  Engine::CookNCollect::FormatScore(int score) {
 	ostringstream oss;
-	oss << std::setfill('0') << std::setw(width) << score;
+	oss << std::setfill('0') << std::setw(7) << score;
 	return oss.str();
 }
 

@@ -19,9 +19,12 @@ namespace Engine {
 		void Draw();
 		Ingredients* SetPosition(float x, float y);
 		Ingredients* SetSpawn();
+		Ingredients* SetCatched();
 		float GetWidth();
 		float GetHeight();
 		bool IsDie();
+		bool IsCatched();
+		bool IsSpawn();
 		float GetX();
 		float GetY();
 		Ingredients* SetFrame(int frameIndex);

@@ -23,17 +23,11 @@ void Engine::Ingredients::Update(float deltaTime)
 	float y = GetY();
 	float yVelocity = 0.2f;
 
-	if (Engine::IngredientsState::SPAWN == state && y <= 0) {
-		state = Engine::IngredientsState::GROUND;
-	}
-
-	if (state == Engine::IngredientsState::GROUND) {
+	if ((Engine::IngredientsState::SPAWN == state && y + GetHeight() <= 0) ||
+		(Engine::IngredientsState::CATCHED == state && y <= 0))
+	{
 		yVelocity = 0;
-		if (groundDur >= groundTime) {
-			state = Engine::IngredientsState::DIE;
-			groundDur = 0;
-		}
-		groundDur += deltaTime;
+		state = Engine::IngredientsState::DIE;
 	}
 
 	y -= yVelocity * deltaTime;
@@ -64,6 +58,12 @@ Engine::Ingredients* Engine::Ingredients::SetSpawn()
 	return this;
 }
 
+Engine::Ingredients* Engine::Ingredients::SetCatched()
+{
+	this->state = Engine::IngredientsState::CATCHED;
+	return this;
+}
+
 float Engine::Ingredients::GetWidth()
 {
 	return sprite->GetScaleWidth();
@@ -77,6 +77,16 @@ float Engine::Ingredients::GetHeight()
 bool Engine::Ingredients::IsDie()
 {
 	return Engine::IngredientsState::DIE == state;
+}
+
+bool Engine::Ingredients::IsSpawn()
+{
+	return Engine::IngredientsState::SPAWN == state;
+}
+
+bool Engine::Ingredients::IsCatched()
+{
+	return Engine::IngredientsState::CATCHED == state;
 }
 
 float Engine::Ingredients::GetX()

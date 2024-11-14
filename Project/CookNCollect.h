@@ -29,6 +29,7 @@ namespace Engine {
 
 		void SpawnObjects();
 		vector<Engine::Ingredients*> objects;
+		vector<Engine::Sprite*> lifes;
 		float spawnDuration = 0,
 			maxSpawnTime = 0,
 			numObjectsInPool = 0,
@@ -36,8 +37,18 @@ namespace Engine {
 			minXBasket = 0,
 			maxXBasket = 0;
 		Text* scoreText = NULL;
-		string FormatScore(int score, int width);
+		string FormatScore(int score);
 		int score = 0;
+		bool gameOver = false;
+
+		//debugging dot
+		Engine::Texture* dotTexture = NULL;
+		Engine::Sprite* dot = NULL;
+
+		Sprite* dotSprite1 = NULL;
+		Sprite* dotSprite2 = NULL;
+		Sprite* dotSprite3 = NULL;
+		Sprite* dotSprite4 = NULL;
 	};
 }
 #endif
