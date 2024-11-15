@@ -15,6 +15,9 @@ Engine::CookNCollect::~CookNCollect()
 
 void Engine::CookNCollect::Init()
 {
+	// Sound Effect
+	catchSound = (new Sound("catch.wav"))->SetVolume(100);
+
 	// Basket
 	texture = new Texture("basket.png");
 	basketSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetScale(0.3);
@@ -61,7 +64,7 @@ void Engine::CookNCollect::Init()
 	//load heart texture
 	texture = new Texture("heart.png");
 	for (int i = 0; i < 3; i++) {
-		Sprite* o = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(5)->SetNumYFrames(1)->AddAnimation("gone", 0, 4)->SetScale(2.5)->SetAnimationDuration(100);
+		Sprite* o = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(5)->SetNumYFrames(1)->AddAnimation("gone", 0, 4)->SetScale(2.5)->SetAnimationDuration(150);
 		lifes.push_back(o);
 	}
 
@@ -70,6 +73,9 @@ void Engine::CookNCollect::Init()
 	{
 		lifes[i]->SetPosition(setting->screenWidth - (i + 1) * lifes[i]->GetScaleWidth() - (25 + i*10), setting->screenHeight - lifes[i]->GetScaleHeight()-25);
 	}
+
+	// nyoba animasi
+	lifes[0]->PlayAnim("gone");
 }
 
 void Engine::CookNCollect::Update()
@@ -87,6 +93,7 @@ void Engine::CookNCollect::Update()
 			// detect coallision and update score
 			if (o->GetY() <= basketSprite->GetScaleHeight() && o->GetY() >= (basketSprite->GetScaleHeight() - 5) && o->IsSpawn()) {
 				if (o->GetBoundingBox()->CollideWith(basketSprite->GetBoundingBox())) {
+					catchSound->Play(false);
 					score += 100;
 					scoreText->SetText(FormatScore(score));
 					o->SetCatched();
@@ -121,6 +128,10 @@ void Engine::CookNCollect::Update()
 
 		// Count spawn duration
 		spawnDuration += GetGameTime();
+
+		for (Sprite* o : lifes) {
+			o->Update(GetGameTime());
+		}
 	}
 
 	//Shape for debug
@@ -159,7 +170,7 @@ void Engine::CookNCollect::Render()
 */
 Engine::Sprite* Engine::CookNCollect::CreateSprite()
 {
-	return (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->AddAnimation("hit", 2, 4)->AddAnimation("spikes", 5, 12)->AddAnimation("idle-1", 14, 27)->AddAnimation("idle-2", 28, 41)->AddAnimation("spikes-out", 42, 49)->PlayAnim("idle-1")->SetScale(4)->SetAnimationDuration(100);
+	return (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(4);
 
 }
 

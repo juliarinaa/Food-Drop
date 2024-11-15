@@ -20,12 +20,12 @@
 
 int main(int argc, char** argv) {
 	Engine::Setting* setting = new Engine::Setting();
-	setting->screenWidth = 1600;
-	setting->screenHeight = 900;
+	setting->screenWidth = 1280;
+	setting->screenHeight = 720;
 	setting->windowFlag = Engine::WindowFlag::FULLSCREEN;
 	setting->vsync = false;
 	setting->targetFrameRate = 75;
-	Engine::Game* game = new Engine::LessonAI02_NPCWave(setting);
+	Engine::Game* game = new Engine::CookNCollect(setting);
 	game->Run();
 	delete setting;
 	delete game;

@@ -38,6 +38,7 @@ namespace Engine {
 		Sprite* SetBoundingBoxSize(float w, float h);
 		Sprite* SetWireframe(bool wireframe);
 		int GetTotalFrames();
+		int GetFrameIndex();
 		float GetRotation();
 		float GetScale();
 		float GetScaleWidth();

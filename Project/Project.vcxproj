@@ -152,6 +152,7 @@
     <ClInclude Include="BaseCharacter.h" />
     <ClInclude Include="CookNCollect.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Heart.h" />
     <ClInclude Include="Ingredients.h" />
     <ClInclude Include="Lesson11_ParallaxScrolling.h" />
     <ClInclude Include="LessonAI01_SteeringBehaviors.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="BaseCharacter.cpp" />
     <ClCompile Include="CookNCollect.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Heart.cpp" />
     <ClCompile Include="Ingredients.cpp" />
     <ClCompile Include="Lesson11_ParallaxScrolling.cpp" />
     <ClCompile Include="LessonAI01_SteeringBehaviors.cpp" />

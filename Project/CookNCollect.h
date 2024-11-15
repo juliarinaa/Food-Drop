@@ -7,6 +7,7 @@
 #include "Sprite.h"
 #include "Ingredients.h"
 #include "Text.h"
+#include "Sound.h"
 #include <vector>
 #include <sstream>
 #include <iomanip>
@@ -28,18 +29,24 @@ namespace Engine {
 		Engine::Sprite* basketSprite = NULL;
 
 		void SpawnObjects();
+
 		vector<Engine::Ingredients*> objects;
 		vector<Engine::Sprite*> lifes;
+
 		float spawnDuration = 0,
 			maxSpawnTime = 0,
 			numObjectsInPool = 0,
 			numObjectPerSpawn = 0,
 			minXBasket = 0,
 			maxXBasket = 0;
+
 		Text* scoreText = NULL;
 		string FormatScore(int score);
 		int score = 0;
+		
 		bool gameOver = false;
+
+		Sound* catchSound = NULL;
 
 		//debugging dot
 		Engine::Texture* dotTexture = NULL;

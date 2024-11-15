@@ -151,6 +151,11 @@ float Engine::Sprite::GetScale()
 	return this->s;
 }
 
+int Engine::Sprite::GetFrameIndex()
+{
+	return this->frameIndex;
+}
+
 Engine::Sprite* Sprite::SetSize(float width, float height)
 {
 	this->width = width;
@@ -266,6 +271,8 @@ Engine::Sprite* Engine::Sprite::SetFrame(int frameIndex)
 	}
 	return this;
 }
+
+
 
 
 
