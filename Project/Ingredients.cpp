@@ -44,8 +44,6 @@ void Engine::Ingredients::Draw()
 	sprite->Draw();
 }
 
-
-
 Engine::Ingredients* Engine::Ingredients::SetPosition(float x, float y)
 {
 	sprite->SetPosition(x, y);
@@ -72,6 +70,11 @@ float Engine::Ingredients::GetWidth()
 float Engine::Ingredients::GetHeight()
 {
 	return sprite->GetScaleHeight();
+}
+
+int Engine::Ingredients::GetFrameIndex()
+{
+	return sprite->GetFrameIndex();
 }
 
 bool Engine::Ingredients::IsDie()

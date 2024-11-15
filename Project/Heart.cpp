@@ -3,9 +3,7 @@
 Engine::Heart::Heart(Sprite* sprite)
 {
 	this->sprite = sprite;
-	state = Engine::HeartState::DIE;
-	groundDur = 0;
-	groundTime = 3000;
+	state = Engine::HeartState::EXIST;
 }
 
 Engine::Heart::~Heart()
@@ -13,30 +11,15 @@ Engine::Heart::~Heart()
 
 }
 
-//void Engine::Heart::Update(float deltaTime)
-//{
-//	if (sprite->frameIndex == endFrameIndex)
-//		return;
-//
-//	frameDuration += deltaTime;
-//
-//	if (frameDuration >= maxFrameDuratin) {
-//		frameDuration = 0;
-//		if(frameIndex < 4) frameIndex
-//		frameIndex = (frameIndex < currentAnim->startFrameIndex || frameIndex == currentAnim->endFrameIndex) ? currentAnim->startFrameIndex : frameIndex;
-//	}
-//}
+void Engine::Heart::Update(float deltaTime)
+{
+	if(Engine::HeartState::DIE == state) sprite->PlayAnimOnce(deltaTime);
+}
 
 void Engine::Heart::Draw()
 {
-	if (state == Engine::HeartState::DIE) {
-		return;
-	}
-
 	sprite->Draw();
 }
-
-
 
 Engine::Heart* Engine::Heart::SetPosition(float x, float y)
 {
@@ -59,6 +42,12 @@ bool Engine::Heart::IsDie()
 	return Engine::HeartState::DIE == state;
 }
 
+Engine::Heart* Engine::Heart::SetDie()
+{
+	this->state = Engine::HeartState::DIE;
+	return this;
+}
+
 float Engine::Heart::GetX()
 {
 	return sprite->GetPosition().x;
@@ -67,4 +56,10 @@ float Engine::Heart::GetX()
 float Engine::Heart::GetY()
 {
 	return sprite->GetPosition().y;
+}
+
+Engine::Heart* Engine::Heart::PlayAnim(string name)
+{
+	sprite->PlayAnim(name);
+	return this;
 }

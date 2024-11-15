@@ -1,5 +1,5 @@
-#ifndef TURTLE_H
-#define TURTLE_H
+#ifndef HEART_H
+#define HEART_H
 
 #include "Sprite.h"
 
@@ -16,7 +16,8 @@ namespace Engine {
 		void Update(float deltaTime);
 		void Draw();
 		Heart* SetPosition(float x, float y);
-		Heart* SetSpawn();
+		Heart* PlayAnim(string name);
+		Heart* SetDie();
 		float GetWidth();
 		float GetHeight();
 		bool IsDie();

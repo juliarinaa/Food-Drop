@@ -60,6 +60,20 @@ void Engine::Sprite::Update(float deltaTime)
 	}
 }
 
+void Engine::Sprite::PlayAnimOnce(float deltaTime)
+{
+	if (frameIndex == currentAnim->endFrameIndex)
+		return;
+
+	frameDuration += deltaTime;
+
+	if (frameDuration >= maxFrameDuration) {
+		frameDuration = 0;
+		frameIndex = (frameIndex < currentAnim->startFrameIndex || frameIndex > currentAnim->endFrameIndex) ? currentAnim->startFrameIndex : frameIndex + 1;
+	}
+}
+
+
 Engine::Sprite* Engine::Sprite::AddAnimation(string name, int startFrameIndex, int endFrameIndex)
 {
 	AnimData* a = new AnimData();
@@ -194,8 +208,6 @@ vec2 Engine::Sprite::GetPosition()
 {
 	return position;
 }
-
-
 
 mat4 Sprite::CreateTransform()
 {

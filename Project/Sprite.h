@@ -23,6 +23,7 @@ namespace Engine {
 		~Sprite();
 		void Draw();
 		void Update(float deltaTime);
+		void PlayAnimOnce(float deltaTime);
 		Sprite* AddAnimation(string name, int startFrameIndex, int endFrameIndex);
 		Sprite* PlayAnim(string name);
 		Sprite* SetFlipHorizontal(bool flipHorizontal);

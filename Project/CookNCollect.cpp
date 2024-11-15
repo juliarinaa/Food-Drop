@@ -16,7 +16,7 @@ Engine::CookNCollect::~CookNCollect()
 void Engine::CookNCollect::Init()
 {
 	// Sound Effect
-	catchSound = (new Sound("catch.wav"))->SetVolume(100);
+	correctSound = (new Sound("catch.wav"))->SetVolume(100);
 
 	// Basket
 	texture = new Texture("basket.png");
@@ -64,41 +64,58 @@ void Engine::CookNCollect::Init()
 	//load heart texture
 	texture = new Texture("heart.png");
 	for (int i = 0; i < 3; i++) {
-		Sprite* o = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(5)->SetNumYFrames(1)->AddAnimation("gone", 0, 4)->SetScale(2.5)->SetAnimationDuration(150);
-		lifes.push_back(o);
+		Heart* o = new Heart((new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(5)->SetNumYFrames(1)->AddAnimation("gone", 0, 4)->SetScale(2.5)->SetAnimationDuration(150));
+		hearts.push_back(o);
 	}
 
 	// set heart position
 	for (size_t i = 0; i < 3; i++)
 	{
-		lifes[i]->SetPosition(setting->screenWidth - (i + 1) * lifes[i]->GetScaleWidth() - (25 + i*10), setting->screenHeight - lifes[i]->GetScaleHeight()-25);
+		hearts[i]->SetPosition(setting->screenWidth - (i + 1) * hearts[i]->GetWidth() - (25 + i*10), setting->screenHeight - hearts[i]->GetHeight()-25);
 	}
 
 	// nyoba animasi
-	lifes[0]->PlayAnim("gone");
+	hearts[0]->PlayAnim("gone");
 }
 
 void Engine::CookNCollect::Update()
 {
+	// quit button
+	if (inputManager->IsKeyReleased("quit")) {
+		state = Engine::State::EXIT;
+	}
 
 	if (!gameOver) {
-		// quit button
-		if (inputManager->IsKeyReleased("quit")) {
-			state = Engine::State::EXIT;
-		}
-
 		// Update all objects
 		for (Ingredients* o : objects) {
 			o->Update(GetGameTime());
 			// detect coallision and update score
-			if (o->GetY() <= basketSprite->GetScaleHeight() && o->GetY() >= (basketSprite->GetScaleHeight() - 5) && o->IsSpawn()) {
-				if (o->GetBoundingBox()->CollideWith(basketSprite->GetBoundingBox())) {
-					catchSound->Play(false);
+			// kalo misal si makanan itu berada di deket keranjang dan dia blm menghilang dari 
+			// layar ataupun pernah ketangkap sebelumnya dan ada tabrakan dengan keranjang maka...
+			if (o->GetY() <= basketSprite->GetScaleHeight()
+				&& o->GetY() >= (basketSprite->GetScaleHeight() - 5) 
+				&& o->IsSpawn() 
+				&& o->GetBoundingBox()->CollideWith(basketSprite->GetBoundingBox())) {
+				// misalkan makanan no.8 (telur) itu yg gak bleh ditangkap (buat ngetes pengurangan nyawa)
+				if (o->GetFrameIndex() == 8) {
+					for (int i = 2; i >= 0; i--)
+					{
+						if (hearts[i]->IsDie()) continue;
+						hearts[i]->PlayAnim("gone")->SetDie();
+						break;
+					}
+				}
+				else {
+					correctSound->Play(false);
 					score += 100;
 					scoreText->SetText(FormatScore(score));
-					o->SetCatched();
 				}
+				o->SetCatched();
 			}
+		}
+
+		for (Heart* o : hearts) {
+			o->Update(GetGameTime());
 		}
 
 		// basket movement -> berdasarkan lesson 05
@@ -128,10 +145,6 @@ void Engine::CookNCollect::Update()
 
 		// Count spawn duration
 		spawnDuration += GetGameTime();
-
-		for (Sprite* o : lifes) {
-			o->Update(GetGameTime());
-		}
 	}
 
 	//Shape for debug
@@ -152,7 +165,7 @@ void Engine::CookNCollect::Render()
 	for (Ingredients* o : objects) {
 		o->Draw();
 	}
-	for (Sprite* o : lifes) {
+	for (Heart* o : hearts) {
 		o->Draw();
 	}
 	basketSprite->Draw();

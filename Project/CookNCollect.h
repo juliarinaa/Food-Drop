@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include "Sprite.h"
 #include "Ingredients.h"
+#include "Heart.h"
 #include "Text.h"
 #include "Sound.h"
 #include <vector>
@@ -31,7 +32,7 @@ namespace Engine {
 		void SpawnObjects();
 
 		vector<Engine::Ingredients*> objects;
-		vector<Engine::Sprite*> lifes;
+		vector<Engine::Heart*> hearts;
 
 		float spawnDuration = 0,
 			maxSpawnTime = 0,
@@ -46,7 +47,7 @@ namespace Engine {
 		
 		bool gameOver = false;
 
-		Sound* catchSound = NULL;
+		Sound* correctSound = NULL;
 
 		//debugging dot
 		Engine::Texture* dotTexture = NULL;

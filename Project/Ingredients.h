@@ -27,6 +27,7 @@ namespace Engine {
 		bool IsSpawn();
 		float GetX();
 		float GetY();
+		int GetFrameIndex();
 		Ingredients* SetFrame(int frameIndex);
 		BoundingBox* GetBoundingBox();
 	protected:
