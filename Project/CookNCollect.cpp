@@ -63,9 +63,9 @@ void Engine::CookNCollect::Init()
 
 	//Set overlay white for background (pict)
 	Texture* overlayWhiteTexture = new Texture("overlay_white.png");
-	overlayWhiteSprite = (new Sprite(overlayWhiteTexture, defaultSpriteShader, defaultQuad))->SetSize(600, 1200);
+	overlayWhiteSprite = (new Sprite(overlayWhiteTexture, defaultSpriteShader, defaultQuad))->SetSize(650, 1200);
 	// Menentukan posisi X dan Y untuk meletakkan overlay di tengah layar
-	float posX = (setting->screenWidth - 600) / 2;  // Posisi X di tengah
+	float posX = (setting->screenWidth - 650) / 2;  // Posisi X di tengah
 	float posY = (setting->screenHeight - 1200) / 2; // Posisi Y di tengah
 
 	// Set posisi overlay
