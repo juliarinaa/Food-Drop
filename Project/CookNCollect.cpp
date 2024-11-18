@@ -54,8 +54,22 @@ void Engine::CookNCollect::Init()
 	SetBackgroundColor(201, 130, 130);
 
 	//Set background (pict)
-	Texture* bgTexture = new Texture("8408130.png");
+	Texture* bgTexture = new Texture("background_restaurant.png");
 	backgroundSprite = (new Sprite(bgTexture, defaultSpriteShader, defaultQuad))->SetSize((float)setting->screenWidth, (float)setting->screenHeight);
+
+	//Set overlay black for background (pict)
+	Texture* overlayBlackTexture = new Texture("overlay_black.png");
+	overlayBlackSprite = (new Sprite(overlayBlackTexture, defaultSpriteShader, defaultQuad))->SetSize((float)setting->screenWidth, (float)setting->screenHeight);
+
+	//Set overlay white for background (pict)
+	Texture* overlayWhiteTexture = new Texture("overlay_white.png");
+	overlayWhiteSprite = (new Sprite(overlayWhiteTexture, defaultSpriteShader, defaultQuad))->SetSize(600, 1200);
+	// Menentukan posisi X dan Y untuk meletakkan overlay di tengah layar
+	float posX = (setting->screenWidth - 600) / 2;  // Posisi X di tengah
+	float posY = (setting->screenHeight - 1200) / 2; // Posisi Y di tengah
+
+	// Set posisi overlay
+	overlayWhiteSprite->SetPosition(posX, posY);
 
 	// Get the dimensions of the background and screen
 	float bgWidth = bgTexture->GetWidth();
@@ -187,6 +201,8 @@ void Engine::CookNCollect::Update()
 void Engine::CookNCollect::Render()
 {
 	backgroundSprite->Draw();
+	overlayBlackSprite->Draw();
+	overlayWhiteSprite->Draw();
 
 	// Render all objects
 	for (Ingredients* o : objects) {

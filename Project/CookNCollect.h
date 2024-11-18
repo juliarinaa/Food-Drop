@@ -25,7 +25,11 @@ namespace Engine {
 	private:
 		Engine::Texture* texture = NULL;
 		Engine::Sprite* CreateSprite();
-		Sprite* backgroundSprite = NULL;
+		Engine::Sprite* backgroundSprite = NULL;
+		Engine::Texture* overlayBlackTexture = NULL;
+		Engine::Sprite* overlayBlackSprite = NULL;
+		Engine::Texture* overlayWhiteTexture = NULL;
+		Engine::Sprite* overlayWhiteSprite = NULL;
 
 		Engine::Texture* basketTexture = NULL;
 		Engine::Sprite* basketSprite = NULL;
