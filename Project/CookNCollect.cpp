@@ -67,37 +67,33 @@ void Engine::CookNCollect::Init()
 	// Menentukan posisi X dan Y untuk meletakkan overlay di tengah layar
 	float posX = (setting->screenWidth - 650) / 2;  // Posisi X di tengah
 	float posY = (setting->screenHeight - 1200) / 2; // Posisi Y di tengah
-
 	// Set posisi overlay
 	overlayWhiteSprite->SetPosition(posX, posY);
 
-	// Get the dimensions of the background and screen
-	float bgWidth = bgTexture->GetWidth();
-	float bgHeight = bgTexture->GetHeight();
-	float screenWidth = (float)setting->screenWidth;
-	float screenHeight = (float)setting->screenHeight;
-
-	// Calculate scale to maintain aspect ratio and cover screen
-	float scaleX = screenWidth / bgWidth;
-	float scaleY = screenHeight / bgHeight;
-	float scale = std::max(scaleX, scaleY); // Zoom to cover the screen
-
-	// Create and set the sprite
-	backgroundSprite = new Sprite(bgTexture, defaultSpriteShader, defaultQuad);
-	backgroundSprite->SetScale(scale);
-
-	// Menyesuaikan posisi background
-	marginX = -50;
-	float offsetX = marginX;
-	float offsetY = (screenHeight - (bgHeight * scale)) / 2;
-	backgroundSprite->SetPosition(offsetX, offsetY);
+	//Set notes for request
+	Texture* notesTexture = new Texture("notes.png");
+	// Mendapatkan ukuran asli gambar notes.png
+	float notesWidth = notesTexture->GetWidth();
+	float notesHeight = notesTexture->GetHeight();
+	// Menghitung skala 0.1f berdasarkan ukuran asli
+	float scale = 0.2f;
+	// Menetapkan ukuran notes sesuai skala 0.1f
+	notesSprite = (new Sprite(notesTexture, defaultSpriteShader, defaultQuad))->SetSize(notesWidth * scale, notesHeight * scale); // Set size berdasarkan skala
+	// Set posisi notes sesuai kebutuhan
+	notesSprite->SetPosition(1300, 400);  // Sesuaikan posisi
 
 	// Add input
 	inputManager->AddInputMapping("quit", SDLK_ESCAPE);
 	
+
+	// Score title setting
+	scoreTitle = new Text("ARCADECLASSIC.ttf", 40, defaultTextShader);
+	scoreTitle->SetColor(255, 255, 255)->SetPosition(25, setting->screenHeight - scoreTitle->GetFontSize() - 5);
+	scoreTitle->SetText("SCORE");  // Menampilkan teks "SCORE"
+
 	// Score text setting
 	scoreText = new Text("ARCADECLASSIC.ttf", 40, defaultTextShader);
-	scoreText->SetColor(255, 255, 255)->SetPosition(25, setting->screenHeight - scoreText->GetFontSize() - 5);
+	scoreText->SetColor(255, 255, 255)->SetPosition(25, setting->screenHeight - scoreText->GetFontSize() - 50);
 	scoreText->SetText("0000000");
 
 	//load heart texture
@@ -203,6 +199,7 @@ void Engine::CookNCollect::Render()
 	backgroundSprite->Draw();
 	overlayBlackSprite->Draw();
 	overlayWhiteSprite->Draw();
+	notesSprite->Draw();
 
 	// Render all objects
 	for (Ingredients* o : objects) {
@@ -212,6 +209,7 @@ void Engine::CookNCollect::Render()
 		o->Draw();
 	}
 	basketSprite->Draw();
+	scoreTitle->Draw();
 	scoreText->Draw();
 	dot->Draw();
 

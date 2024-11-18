@@ -30,6 +30,8 @@ namespace Engine {
 		Engine::Sprite* overlayBlackSprite = NULL;
 		Engine::Texture* overlayWhiteTexture = NULL;
 		Engine::Sprite* overlayWhiteSprite = NULL;
+		Engine::Texture* notesTexture = NULL;
+		Engine::Sprite* notesSprite = NULL;
 
 		Engine::Texture* basketTexture = NULL;
 		Engine::Sprite* basketSprite = NULL;
@@ -47,6 +49,7 @@ namespace Engine {
 			maxXBasket = 0,
 			marginX = 0;
 
+		Text* scoreTitle = NULL;
 		Text* scoreText = NULL;
 		string FormatScore(int score);
 		int score = 0;
