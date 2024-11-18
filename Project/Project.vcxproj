@@ -146,7 +146,6 @@
     <None Include="text.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="blabla.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="BaseCharacter.h" />
@@ -187,7 +186,6 @@
     <ClInclude Include="Turtle.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="blabla.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="BaseCharacter.cpp" />
@@ -216,7 +214,6 @@
     <ClCompile Include="MainMenuScreen.cpp" />
     <ClCompile Include="Music.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
-    <ClCompile Include="punyajulia.cpp" />
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="SATCollision.cpp" />
     <ClCompile Include="Screen.cpp" />

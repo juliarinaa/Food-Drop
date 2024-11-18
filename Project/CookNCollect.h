@@ -25,6 +25,7 @@ namespace Engine {
 	private:
 		Engine::Texture* texture = NULL;
 		Engine::Sprite* CreateSprite();
+		Sprite* backgroundSprite = NULL;
 
 		Engine::Texture* basketTexture = NULL;
 		Engine::Sprite* basketSprite = NULL;
@@ -39,7 +40,8 @@ namespace Engine {
 			numObjectsInPool = 0,
 			numObjectPerSpawn = 0,
 			minXBasket = 0,
-			maxXBasket = 0;
+			maxXBasket = 0,
+			marginX = 0;
 
 		Text* scoreText = NULL;
 		string FormatScore(int score);

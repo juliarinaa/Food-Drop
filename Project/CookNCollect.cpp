@@ -53,6 +53,31 @@ void Engine::CookNCollect::Init()
 	// Set background
 	SetBackgroundColor(201, 130, 130);
 
+	//Set background (pict)
+	Texture* bgTexture = new Texture("8408130.png");
+	backgroundSprite = (new Sprite(bgTexture, defaultSpriteShader, defaultQuad))->SetSize((float)setting->screenWidth, (float)setting->screenHeight);
+
+	// Get the dimensions of the background and screen
+	float bgWidth = bgTexture->GetWidth();
+	float bgHeight = bgTexture->GetHeight();
+	float screenWidth = (float)setting->screenWidth;
+	float screenHeight = (float)setting->screenHeight;
+
+	// Calculate scale to maintain aspect ratio and cover screen
+	float scaleX = screenWidth / bgWidth;
+	float scaleY = screenHeight / bgHeight;
+	float scale = std::max(scaleX, scaleY); // Zoom to cover the screen
+
+	// Create and set the sprite
+	backgroundSprite = new Sprite(bgTexture, defaultSpriteShader, defaultQuad);
+	backgroundSprite->SetScale(scale);
+
+	// Menyesuaikan posisi background
+	marginX = -50;
+	float offsetX = marginX;
+	float offsetY = (screenHeight - (bgHeight * scale)) / 2;
+	backgroundSprite->SetPosition(offsetX, offsetY);
+
 	// Add input
 	inputManager->AddInputMapping("quit", SDLK_ESCAPE);
 	
@@ -161,6 +186,8 @@ void Engine::CookNCollect::Update()
 
 void Engine::CookNCollect::Render()
 {
+	backgroundSprite->Draw();
+
 	// Render all objects
 	for (Ingredients* o : objects) {
 		o->Draw();
