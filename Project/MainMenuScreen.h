@@ -21,6 +21,7 @@ namespace Engine {
 		void Update();
 		void Draw();
 	private:
+		Sprite* background = NULL;
 		vector<Button*> buttons;
 		Text* text;
 		int currentButtonIndex = 0;

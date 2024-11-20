@@ -11,12 +11,16 @@ Engine::CookNCollect::~CookNCollect()
 	delete basketTexture;
 	delete basketSprite;
 	delete scoreText;
+	delete correctSound;
+	delete wrongSound;
 }
 
 void Engine::CookNCollect::Init()
 {
 	// Sound Effect
-	correctSound = (new Sound("catch.wav"))->SetVolume(100);
+	correctSound = (new Sound("correct.wav"))->SetVolume(100);
+	wrongSound = (new Sound("wrong.wav"))->SetVolume(100);
+	music = (new Music("00 lolurio - Everyday Life.ogg"))->SetVolume(70)->Play(true);
 
 	// Basket
 	texture = new Texture("basket.png");
@@ -30,8 +34,8 @@ void Engine::CookNCollect::Init()
 
 	// dot buat debugging aj
 	dotTexture = new Texture("dot.png");
-	dot = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
-	dot->SetPosition((int)setting->screenWidth / 2, basketSprite->GetScaleHeight() - 5);
+	/*dot = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
+	dot->SetPosition((int)setting->screenWidth / 2, basketSprite->GetScaleHeight() - 5);*/
 
 	dotSprite1 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
 	dotSprite2 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
@@ -46,7 +50,7 @@ void Engine::CookNCollect::Init()
 	// Load ingredient texture
 	texture = new Texture("foods.png");
 	for (int i = 0; i < numObjectsInPool; i++) {
-		Ingredients* o = new Ingredients(CreateSprite());
+		Food* o = new Food(CreateSprite());
 		objects.push_back(o);
 	}
 
@@ -62,29 +66,33 @@ void Engine::CookNCollect::Init()
 	overlayBlackSprite = (new Sprite(overlayBlackTexture, defaultSpriteShader, defaultQuad))->SetSize((float)setting->screenWidth, (float)setting->screenHeight);
 
 	//Set overlay white for background (pict)
-	Texture* overlayWhiteTexture = new Texture("overlay_white.png");
-	overlayWhiteSprite = (new Sprite(overlayWhiteTexture, defaultSpriteShader, defaultQuad))->SetSize(650, 1200);
+	Texture* overlayWhiteTexture = new Texture("overlay_white2.png");
+	overlayWhiteSprite = (new Sprite(overlayWhiteTexture, defaultSpriteShader, defaultQuad))->SetSize(setting->screenWidth*22/60, setting->screenHeight);
 	// Menentukan posisi X dan Y untuk meletakkan overlay di tengah layar
-	float posX = (setting->screenWidth - 650) / 2;  // Posisi X di tengah
-	float posY = (setting->screenHeight - 1200) / 2; // Posisi Y di tengah
+	float posX = (setting->screenWidth*19/60);  // Posisi X di tengah
+	float posY = 0; // Posisi Y di tengah
 	// Set posisi overlay
 	overlayWhiteSprite->SetPosition(posX, posY);
 
 	//Set notes for request
 	Texture* notesTexture = new Texture("notes.png");
-	// Mendapatkan ukuran asli gambar notes.png
-	float notesWidth = notesTexture->GetWidth();
-	float notesHeight = notesTexture->GetHeight();
-	// Menghitung skala 0.1f berdasarkan ukuran asli
-	float scale = 0.2f;
-	// Menetapkan ukuran notes sesuai skala 0.1f
-	notesSprite = (new Sprite(notesTexture, defaultSpriteShader, defaultQuad))->SetSize(notesWidth * scale, notesHeight * scale); // Set size berdasarkan skala
-	// Set posisi notes sesuai kebutuhan
-	notesSprite->SetPosition(1300, 400);  // Sesuaikan posisi
+	notesSprite = (new Sprite(notesTexture, defaultSpriteShader, defaultQuad));
+	notesSprite->SetSize(setting->screenWidth * 9 / 60, notesSprite->GetScaleHeight() / notesSprite->GetScaleWidth() * setting->screenWidth * 9 / 60);
+	//notesSprite->SetPosition(setting->screenWidth * 41 / 60 + (setting->screenWidth * 19 / 60 - notesSprite->GetScaleWidth()) / 2, (setting->screenHeight - notesSprite->GetScaleHeight()) / 2);
+	notesSprite->SetPosition((setting->screenWidth * 19 / 60 - notesSprite->GetScaleWidth()) / 2, setting->screenHeight - notesSprite->GetScaleHeight());
+
+	foodTypeAmount = (std::rand() % 3) + 1;
+
+	//set request
+	for (size_t i = 1; i <= foodTypeAmount; i++)
+	{
+		Sprite* foodSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(3)->SetFrame(rand() % 9);
+		Text* amountText = (new Text("ARCADECLASSIC.ttf", 40, defaultTextShader))->SetColor(255, 255, 255);
+		request.insert({i, (new Request(foodSprite, amountText))->SetAmount((rand() % 5) + 1)});
+	}
 
 	// Add input
 	inputManager->AddInputMapping("quit", SDLK_ESCAPE);
-	
 
 	// Score title setting
 	scoreTitle = new Text("ARCADECLASSIC.ttf", 40, defaultTextShader);
@@ -108,9 +116,6 @@ void Engine::CookNCollect::Init()
 	{
 		hearts[i]->SetPosition(setting->screenWidth - (i + 1) * hearts[i]->GetWidth() - (25 + i*10), setting->screenHeight - hearts[i]->GetHeight()-25);
 	}
-
-	// nyoba animasi
-	hearts[0]->PlayAnim("gone");
 }
 
 void Engine::CookNCollect::Update()
@@ -122,7 +127,7 @@ void Engine::CookNCollect::Update()
 
 	if (!gameOver) {
 		// Update all objects
-		for (Ingredients* o : objects) {
+		for (Food* o : objects) {
 			o->Update(GetGameTime());
 			// detect coallision and update score
 			// kalo misal si makanan itu berada di deket keranjang dan dia blm menghilang dari 
@@ -133,6 +138,7 @@ void Engine::CookNCollect::Update()
 				&& o->GetBoundingBox()->CollideWith(basketSprite->GetBoundingBox())) {
 				// misalkan makanan no.8 (telur) itu yg gak bleh ditangkap (buat ngetes pengurangan nyawa)
 				if (o->GetFrameIndex() == 8) {
+					wrongSound->Play(false);
 					for (int i = 2; i >= 0; i--)
 					{
 						if (hearts[i]->IsDie()) continue;
@@ -197,12 +203,12 @@ void Engine::CookNCollect::Update()
 void Engine::CookNCollect::Render()
 {
 	backgroundSprite->Draw();
-	overlayBlackSprite->Draw();
+	//overlayBlackSprite->Draw();
 	overlayWhiteSprite->Draw();
 	notesSprite->Draw();
 
 	// Render all objects
-	for (Ingredients* o : objects) {
+	for (Food* o : objects) {
 		o->Draw();
 	}
 	for (Heart* o : hearts) {
@@ -211,7 +217,8 @@ void Engine::CookNCollect::Render()
 	basketSprite->Draw();
 	scoreTitle->Draw();
 	scoreText->Draw();
-	dot->Draw();
+	
+	//dot->Draw();
 
 	dotSprite1->Draw();
 	dotSprite2->Draw();
@@ -232,7 +239,7 @@ void Engine::CookNCollect::SpawnObjects()
 {
 	//Find Die object to reuse for spawning
 	int spawnCount = 0;
-	for (Ingredients* o : objects) {
+	for (Food* o : objects) {
 		if (spawnCount == numObjectPerSpawn) {
 			break;
 		}

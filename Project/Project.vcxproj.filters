@@ -140,13 +140,13 @@
     <ClInclude Include="CookNCollect.h">
       <Filter>Demo Files</Filter>
     </ClInclude>
-    <ClInclude Include="Ingredients.h">
+    <ClInclude Include="Food.h">
       <Filter>Demo Files</Filter>
     </ClInclude>
-    <ClInclude Include="blabla.h">
+    <ClInclude Include="Heart.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Heart.h">
+    <ClInclude Include="Request.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -262,16 +262,13 @@
     <ClCompile Include="CookNCollect.cpp">
       <Filter>Demo Files</Filter>
     </ClCompile>
-    <ClCompile Include="Ingredients.cpp">
+    <ClCompile Include="Food.cpp">
       <Filter>Demo Files</Filter>
     </ClCompile>
-    <ClCompile Include="blabla.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="punyajulia.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Heart.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Request.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

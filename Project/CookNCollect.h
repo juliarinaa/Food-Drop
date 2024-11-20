@@ -5,10 +5,12 @@
 #include "Setting.h"
 #include "Texture.h"
 #include "Sprite.h"
-#include "Ingredients.h"
+#include "Food.h"
 #include "Heart.h"
 #include "Text.h"
 #include "Sound.h"
+#include "Music.h"
+#include "Request.h"
 #include <vector>
 #include <sstream>
 #include <iomanip>
@@ -33,12 +35,18 @@ namespace Engine {
 		Engine::Texture* notesTexture = NULL;
 		Engine::Sprite* notesSprite = NULL;
 
+		// Request
+		map<int, Request*> request;
+		int foodTypeAmount = 0;
+		bool requestFulfilled = false;
+
+		// Basket
 		Engine::Texture* basketTexture = NULL;
 		Engine::Sprite* basketSprite = NULL;
 
 		void SpawnObjects();
 
-		vector<Engine::Ingredients*> objects;
+		vector<Engine::Food*> objects;
 		vector<Engine::Heart*> hearts;
 
 		float spawnDuration = 0,
@@ -57,6 +65,8 @@ namespace Engine {
 		bool gameOver = false;
 
 		Sound* correctSound = NULL;
+		Sound* wrongSound = NULL;
+		Music* music = NULL;
 
 		//debugging dot
 		Engine::Texture* dotTexture = NULL;

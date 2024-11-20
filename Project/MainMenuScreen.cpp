@@ -3,14 +3,19 @@
 Engine::MainMenuScreen::MainMenuScreen()
 {
 	text = NULL;
+	background = NULL;
 }
 
 void Engine::MainMenuScreen::Init()
 {
 	// Create a Texture
 	Texture* texture = new Texture("buttons.png");
+	Texture* bgTexture = new Texture("cafe.png");
 
 	// Create Sprites
+	background = (new Sprite(bgTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))->SetPosition(0, 0);
+	background->SetSize(game->GetSettings()->screenWidth, background->GetScaleHeight() / background->GetScaleWidth() * game->GetSettings()->screenWidth - 60);
+
 	Sprite* playSprite = (new Sprite(texture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
 		->SetNumXFrames(6)->SetNumYFrames(1)->AddAnimation("normal", 5, 5)->AddAnimation("hover", 3, 4)
 		->AddAnimation("press", 3, 4)->SetAnimationDuration(400);
@@ -36,7 +41,7 @@ void Engine::MainMenuScreen::Init()
 
 	// Create Text
 	text = (new Text("8-bit Arcade In.ttf", 100, game->GetDefaultTextShader()))
-		->SetText("The Spawning Turtle")->SetPosition(game->GetSettings()->screenWidth * 0.5f - 500, game->GetSettings()->screenHeight - 100.0f)->SetColor(235, 229, 52);
+		->SetText("The Spawning Turtle")->SetPosition(game->GetSettings()->screenWidth * 0.5f - 500, game->GetSettings()->screenHeight - 100.0f)->SetColor(0, 0, 0);
 
 	// Add input mappings
 	game->GetInputManager()->AddInputMapping("next", SDLK_DOWN)
@@ -49,7 +54,7 @@ void Engine::MainMenuScreen::Init()
 void Engine::MainMenuScreen::Update()
 {
 	// Set background
-	game->SetBackgroundColor(52, 155, 235);
+	//game->SetBackgroundColor(52, 155, 235);
 
 	if (game->GetInputManager()->IsKeyReleased("next")) {
 		// Set previous button to normal state
@@ -91,10 +96,12 @@ void Engine::MainMenuScreen::Update()
 
 void Engine::MainMenuScreen::Draw()
 {
+	background->Draw();
 	// Render all buttons
 	for (Button* b : buttons) {
 		b->Draw();
 	}
 	// Render title 
 	text->Draw();
+
 }
