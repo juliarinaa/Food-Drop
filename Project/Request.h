@@ -31,7 +31,6 @@ namespace Engine {
 		Text* amountText = NULL;
 		RequestState state;
 		float x = 0, y = 0;
-		int amount = 0;
 	};
 
 }

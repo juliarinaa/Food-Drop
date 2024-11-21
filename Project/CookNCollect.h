@@ -36,7 +36,8 @@ namespace Engine {
 		Engine::Sprite* notesSprite = NULL;
 
 		// Request
-		map<int, Request*> request;
+		map<int, int> request;
+		vector<Request*> requestAssets;
 		int foodTypeAmount = 0;
 		bool requestFulfilled = false;
 
@@ -59,6 +60,8 @@ namespace Engine {
 
 		Text* scoreTitle = NULL;
 		Text* scoreText = NULL;
+		Text* orderTitle = NULL;
+
 		string FormatScore(int score);
 		int score = 0;
 		

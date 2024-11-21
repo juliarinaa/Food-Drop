@@ -17,6 +17,8 @@ Engine::CookNCollect::~CookNCollect()
 
 void Engine::CookNCollect::Init()
 {
+	srand(std::time(0));
+
 	// Sound Effect
 	correctSound = (new Sound("correct.wav"))->SetVolume(100);
 	wrongSound = (new Sound("wrong.wav"))->SetVolume(100);
@@ -81,14 +83,28 @@ void Engine::CookNCollect::Init()
 	//notesSprite->SetPosition(setting->screenWidth * 41 / 60 + (setting->screenWidth * 19 / 60 - notesSprite->GetScaleWidth()) / 2, (setting->screenHeight - notesSprite->GetScaleHeight()) / 2);
 	notesSprite->SetPosition((setting->screenWidth * 19 / 60 - notesSprite->GetScaleWidth()) / 2, setting->screenHeight - notesSprite->GetScaleHeight());
 
-	foodTypeAmount = (std::rand() % 3) + 1;
+	//foodTypeAmount = (std::rand() % 3) + 1;
+	foodTypeAmount = 3;
+
+	// Order text setting
+	orderTitle = (new Text("ARCADECLASSIC.ttf", 27, defaultTextShader));
+	orderTitle->SetColor(0, 0, 0)->SetPosition(notesSprite->GetPosition().x + notesSprite->GetScaleWidth() / 3.5, setting->screenHeight - notesSprite->GetScaleHeight() / 3);
+	orderTitle->SetText("Order");
 
 	//set request
 	for (size_t i = 1; i <= foodTypeAmount; i++)
 	{
-		Sprite* foodSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(3)->SetFrame(rand() % 9);
-		Text* amountText = (new Text("ARCADECLASSIC.ttf", 40, defaultTextShader))->SetColor(255, 255, 255);
-		request.insert({i, (new Request(foodSprite, amountText))->SetAmount((rand() % 5) + 1)});
+		int foodAmount = (std::rand() % 5) + 1;
+		int frame = rand() % 9;
+		// meriksa apakah foodnya yang dipilih itu udah ada sebelumnya dalam request
+		while(request.count(frame) == 1){
+			frame = rand() % 9;
+		}
+		//Sprite* foodSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(3)->SetFrame(frame)->SetPosition(notesSprite->GetPosition().x + notesSprite->GetScaleWidth() / 7, setting->screenHeight - notesSprite->GetScaleHeight() * (13 + i * 14) / 60);
+		Sprite* foodSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(2.5)->SetFrame(frame)->SetPosition(notesSprite->GetPosition().x + notesSprite->GetScaleWidth() * 2 / 13, setting->screenHeight - notesSprite->GetScaleHeight() * (22 + i * 11) / 60);
+		Text* amountText = (new Text("ARCADECLASSIC.ttf", 25, defaultTextShader))->SetColor(0, 0, 0)->SetPosition(foodSprite->GetPosition().x + notesSprite->GetScaleWidth()/2, foodSprite->GetPosition().y + foodSprite->GetScaleHeight() / 3);
+		request.insert({frame, foodAmount});
+		requestAssets.push_back((new Request(foodSprite, amountText))->SetAmount(foodAmount));
 	}
 
 	// Add input
@@ -96,7 +112,7 @@ void Engine::CookNCollect::Init()
 
 	// Score title setting
 	scoreTitle = new Text("ARCADECLASSIC.ttf", 40, defaultTextShader);
-	scoreTitle->SetColor(255, 255, 255)->SetPosition(25, setting->screenHeight - scoreTitle->GetFontSize() - 5);
+	scoreTitle->SetColor(255, 255, 255)->SetPosition(25, setting->screenHeight - scoreTitle->GetFontSize());
 	scoreTitle->SetText("SCORE");  // Menampilkan teks "SCORE"
 
 	// Score text setting
@@ -224,6 +240,12 @@ void Engine::CookNCollect::Render()
 	dotSprite2->Draw();
 	dotSprite3->Draw();
 	dotSprite4->Draw();
+
+	for (Request* o : requestAssets) {
+		o->Draw();
+	}
+
+	orderTitle->Draw();
 }
 
 /*

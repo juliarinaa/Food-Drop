@@ -26,7 +26,7 @@ namespace Engine {
 	protected:
 		Sprite* sprite = NULL;
 		HeartState state;
-		float groundDur = 0, groundTime = 0, x = 0, y = 0;
+		float x = 0, y = 0;
 	};
 
 }
