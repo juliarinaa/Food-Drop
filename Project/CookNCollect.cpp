@@ -83,8 +83,7 @@ void Engine::CookNCollect::Init()
 	//notesSprite->SetPosition(setting->screenWidth * 41 / 60 + (setting->screenWidth * 19 / 60 - notesSprite->GetScaleWidth()) / 2, (setting->screenHeight - notesSprite->GetScaleHeight()) / 2);
 	notesSprite->SetPosition((setting->screenWidth * 19 / 60 - notesSprite->GetScaleWidth()) / 2, setting->screenHeight - notesSprite->GetScaleHeight());
 
-	//foodTypeAmount = (std::rand() % 3) + 1;
-	foodTypeAmount = 3;
+	foodTypeAmount = (std::rand() % 3) + 1;
 
 	// Order text setting
 	orderTitle = (new Text("ARCADECLASSIC.ttf", 27, defaultTextShader));
@@ -96,7 +95,7 @@ void Engine::CookNCollect::Init()
 	{
 		int foodAmount = (std::rand() % 5) + 1;
 		int frame = rand() % 9;
-		// meriksa apakah foodnya yang dipilih itu udah ada sebelumnya dalam request
+		// meriksa apakah makanannya yang dipilih itu udah ada sebelumnya dalam request
 		while(request.count(frame) == 1){
 			frame = rand() % 9;
 		}
