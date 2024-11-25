@@ -64,6 +64,7 @@ namespace Engine {
 
 		string FormatScore(int score);
 		int score = 0;
+		int frame;
 		
 		bool gameOver = false;
 

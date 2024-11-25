@@ -70,7 +70,9 @@ float Engine::Request::GetX()
 
 Engine::Request* Engine::Request::SetAmount(int amount) 
 {
-	this->amountText->SetText("x " + to_string(amount));
+	std::string amountStr = "x " + std::to_string(amount);
+	std::cout << "Updating amount: " << amountStr << std::endl;  // Debugging line
+	this->amountText->SetText(amountStr);
 	return this;
 }
 

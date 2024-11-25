@@ -158,6 +158,7 @@ void Engine::CookNCollect::Update()
 					int& remainingAmount = request[o->GetFrameIndex()];
 					if (remainingAmount > 0) {
 						remainingAmount--;
+						requestAssets[frame]->SetAmount(remainingAmount);
 						correctSound->Play(false);
 						score += 100;
 						scoreText->SetText(FormatScore(score));
