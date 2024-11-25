@@ -151,22 +151,53 @@ void Engine::CookNCollect::Update()
 				&& o->GetY() >= (basketSprite->GetScaleHeight() - 5) 
 				&& o->IsSpawn() 
 				&& o->GetBoundingBox()->CollideWith(basketSprite->GetBoundingBox())) {
-				// misalkan makanan no.8 (telur) itu yg gak bleh ditangkap (buat ngetes pengurangan nyawa)
-				if (o->GetFrameIndex() == 8) {
+
+				// Cek apakah makanan ini sesuai dengan request
+				if (request.count(o->GetFrameIndex()) > 0) {
+					// Makanan sesuai permintaan
+					int& remainingAmount = request[o->GetFrameIndex()];
+					if (remainingAmount > 0) {
+						remainingAmount--;
+						correctSound->Play(false);
+						score += 100;
+						scoreText->SetText(FormatScore(score));
+
+						// Hapus dari request jika jumlahnya habis
+						if (remainingAmount == 0) {
+							request.erase(o->GetFrameIndex());
+						}
+					}
+				}
+				else {
+					// Makanan salah
 					wrongSound->Play(false);
-					for (int i = 2; i >= 0; i--)
-					{
+					for (int i = 2; i >= 0; i--) {
 						if (hearts[i]->IsDie()) continue;
 						hearts[i]->PlayAnim("gone")->SetDie();
 						break;
 					}
 				}
-				else {
-					correctSound->Play(false);
-					score += 100;
-					scoreText->SetText(FormatScore(score));
-				}
 				o->SetCatched();
+
+
+
+
+				// misalkan makanan no.8 (telur) itu yg gak bleh ditangkap (buat ngetes pengurangan nyawa)
+				//if (o->GetFrameIndex() == 8) {
+				//	wrongSound->Play(false);
+				//	for (int i = 2; i >= 0; i--)
+				//	{
+				//		if (hearts[i]->IsDie()) continue;
+				//		hearts[i]->PlayAnim("gone")->SetDie();
+				//		break;
+				//	}
+				//}
+				//else {
+				//	correctSound->Play(false);
+				//	score += 100;
+				//	scoreText->SetText(FormatScore(score));
+				//}
+				//o->SetCatched();
 			}
 		}
 
