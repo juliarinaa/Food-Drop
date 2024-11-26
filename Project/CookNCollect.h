@@ -39,7 +39,8 @@ namespace Engine {
 		map<int, int> request;
 		vector<Request*> requestAssets;
 		int foodTypeAmount = 0;
-		bool requestFulfilled = false;
+		bool allRequestFulfilled = false;
+		vector<int> unfulfilledRequest;
 
 		// Basket
 		Engine::Texture* basketTexture = NULL;
@@ -64,7 +65,6 @@ namespace Engine {
 
 		string FormatScore(int score);
 		int score = 0;
-		int frame;
 		
 		bool gameOver = false;
 

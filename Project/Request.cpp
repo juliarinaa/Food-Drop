@@ -1,10 +1,11 @@
 #include "Request.h"
 
-Engine::Request::Request(Sprite* sprite, Text* amountText)
+Engine::Request::Request(Sprite* foodSprite, Sprite* checklistSprite, Text* amountText)
 {
-	this->sprite = sprite;
+	this->sprite = foodSprite;
+	this->checklistSprite = checklistSprite;
 	this->amountText = amountText;
-	state = Engine::RequestState::UNCOMPLETE;
+	state = Engine::RequestState::UNFULLFILLED;
 }
 
 Engine::Request::~Request()
@@ -33,39 +34,13 @@ void Engine::Request::Draw()
 		return;
 	}
 	sprite->Draw();
-	amountText->Draw();
-}
-
-Engine::Request* Engine::Request::SetFoodPosition(float x, float y)
-{
-	sprite->SetPosition(x, y);
-	return this;
-}
-
-Engine::Request* Engine::Request::SetTextPosition(float x, float y)
-{
-	amountText->SetPosition(x, y);
-	return this;
-}
-
-float Engine::Request::GetFoodWidth()
-{
-	return sprite->GetScaleWidth();
-}
-
-float Engine::Request::GetFoodHeight()
-{
-	return sprite->GetScaleHeight();
+	if (state == Engine::RequestState::UNFULLFILLED) amountText->Draw();
+	else checklistSprite->Draw();
 }
 
 int Engine::Request::GetFoodFrameIndex()
 {
 	return sprite->GetFrameIndex();
-}
-
-float Engine::Request::GetX()
-{
-	return sprite->GetPosition().x;
 }
 
 Engine::Request* Engine::Request::SetAmount(int amount) 
@@ -76,9 +51,10 @@ Engine::Request* Engine::Request::SetAmount(int amount)
 	return this;
 }
 
-float Engine::Request::GetY()
+Engine::Request* Engine::Request::SetFullfilled()
 {
-	return sprite->GetPosition().y;
+	this->state = Engine::RequestState::FULLFILLED;
+	return this;
 }
 
 Engine::Request* Engine::Request::SetFoodFrame(int frameIndex) {

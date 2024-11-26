@@ -6,28 +6,24 @@
 
 namespace Engine {
 	enum class RequestState {
-		UNCOMPLETE,
-		COMPLETE,
+		UNFULLFILLED,
+		FULLFILLED,
 		DIE
 	};
 	class Request
 	{
 	public:
-		Request(Sprite* sprite, Text* amountText);
+		Request(Sprite* foodSprite, Sprite* checklistSprite,Text* amountText);
 		~Request();
 		void Update(float deltaTime);
 		void Draw();
-		float GetFoodWidth();
-		float GetFoodHeight();
-		float GetX();
-		float GetY();
 		int GetFoodFrameIndex();
 		Request* SetAmount(int amount);
-		Request* SetFoodPosition(float x, float y);
-		Request* SetTextPosition(float x, float y);
 		Request* SetFoodFrame(int frameIndex);
+		Request* SetFullfilled();
 	protected:
 		Sprite* sprite = NULL;
+		Sprite* checklistSprite = NULL;
 		Text* amountText = NULL;
 		RequestState state;
 		float x = 0, y = 0;
