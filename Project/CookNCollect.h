@@ -45,7 +45,8 @@ namespace Engine {
 		Engine::Texture* basketTexture = NULL;
 		Engine::Sprite* basketSprite = NULL;
 
-		void SpawnObjects();
+		/*void SpawnObjects();*/
+		Food* SpawnObjects();
 
 		vector<Engine::Food*> objects;
 		vector<Engine::Heart*> hearts;
@@ -85,6 +86,9 @@ namespace Engine {
 		//Sprite* dotSprite2 = NULL;
 		//Sprite* dotSprite3 = NULL;
 		//Sprite* dotSprite4 = NULL;
+		Food* currFood = NULL;
+
+		float foodVelocity = 0.2f;
 	};
 }
 #endif

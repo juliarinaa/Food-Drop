@@ -37,9 +37,9 @@ void Engine::CookNCollect::Init()
 	maxXBasket = (setting->screenWidth * 2 / 3 - basketSprite->GetScaleWidth());
 
 	// dot buat debugging aj
-	/*dotTexture = new Texture("dot.png");*/
-	/*dot = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);*/
-	//dot->SetPosition(50, 100);
+	/*dotTexture = new Texture("dot.png");
+	dot = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
+	dot->SetPosition(setting->screenWidth / 2, basketSprite->GetScaleHeight());*/
 
 	/*dotSprite1 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
 	dotSprite2 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
@@ -145,6 +145,8 @@ void Engine::CookNCollect::Init()
 	scoreText = new Text("ARCADECLASSIC.ttf", 40, defaultTextShader);
 	scoreText->SetColor(255, 255, 255)->SetPosition(setting->screenWidth - hearts[0]->GetWidth() - 145, setting->screenHeight *  25 / 36);
 	scoreText->SetText("0000000");
+
+	currFood = SpawnObjects();
 }
 
 void Engine::CookNCollect::Update()
@@ -156,24 +158,20 @@ void Engine::CookNCollect::Update()
 
 	if (!gameOver) {
 		if(!allRequestFullfilled){
-			// Time to spawn objects
-			if (spawnDuration >= maxSpawnTime) {
-				SpawnObjects();
-				spawnDuration = 0;
+			// Spawn objects setelah objek terakhir mencapai ketinggian tertentu
+			if (currFood->GetY() < setting->screenHeight * 0.75) {
+				currFood = SpawnObjects();
 			}
-
-			// Count spawn duration
-			spawnDuration += GetGameTime();
 
 			// Update all objects
 			for (Food* o : objects) {
-				o->Update(GetGameTime());
+				o->Update(GetGameTime(), foodVelocity);
 			
 				// detect coallision and update score
 				// kalo misal si makanan itu berada di deket keranjang dan dia blm menghilang dari 
 				// layar ataupun pernah ketangkap sebelumnya dan ada tabrakan dengan keranjang maka...
 				if (o->GetY() <= basketSprite->GetScaleHeight()
-					&& o->GetY() >= (basketSprite->GetScaleHeight() - 5) 
+					&& o->GetY() >= (basketSprite->GetScaleHeight() - GetGameTime() * foodVelocity - 1)
 					&& o->IsSpawn() 
 					&& o->GetBoundingBox()->CollideWith(basketSprite->GetBoundingBox())) {
 				
@@ -262,6 +260,8 @@ void Engine::CookNCollect::Update()
 					allRequestFullfilled = false;
 					moveUp = true;
 					notesY = setting->screenHeight - notesSprite->GetScaleHeight();
+					foodVelocity += 0.05f;
+					currFood = SpawnObjects();
 				} 
 				if (orderTitleY < fixOrderTitleY) orderTitleY = fixOrderTitleY;
 			}
@@ -328,7 +328,7 @@ void Engine::CookNCollect::Render()
 	scoreTitle->Draw();
 	scoreText->Draw();
 	
-	// dot->Draw();
+	//dot->Draw();
 
 	//dotSprite1->Draw();
 	//dotSprite2->Draw();
@@ -351,9 +351,10 @@ Engine::Sprite* Engine::CookNCollect::CreateSprite()
 
 }
 
-void Engine::CookNCollect::SpawnObjects()
+Engine::Food* Engine::CookNCollect::SpawnObjects()
 {
 	//Find Die object to reuse for spawning
+	Food* currFood = NULL;
 	int spawnCount = 0;
 	for (Food* o : objects) {
 		if (spawnCount == numObjectPerSpawn) {
@@ -362,22 +363,51 @@ void Engine::CookNCollect::SpawnObjects()
 		if (o->IsDie()) {
 			// Set state to spawn
 			o->SetSpawn();
-
+			currFood = o;
 			int frame = rand() % 17;
 			if (frame % 2 != 0) frame = unfulfilledRequest[rand() % unfulfilledRequest.size()];
 			else frame /= 2;
 			o->SetFrame(frame);
 
 			// Random spawn position
-			int min = (int)(setting->screenWidth/3);
-			int max = (int)(setting->screenWidth*2/3 - o->GetWidth());
+			int min = (int)(setting->screenWidth / 3);
+			int max = (int)(setting->screenWidth * 2 / 3 - o->GetWidth());
 			float x = (float)(rand() % (max - min + 1) + min);
 			float y = setting->screenHeight + o->GetHeight();
 			o->SetPosition(x, y);
 			spawnCount++;
 		}
 	}
+	return currFood;
 }
+
+//void Engine::CookNCollect::SpawnObjects()
+//{
+//	//Find Die object to reuse for spawning
+//	int spawnCount = 0;
+//	for (Food* o : objects) {
+//		if (spawnCount == numObjectPerSpawn) {
+//			break;
+//		}
+//		if (o->IsDie()) {
+//			// Set state to spawn
+//			o->SetSpawn();
+//
+//			int frame = rand() % 17;
+//			if (frame % 2 != 0) frame = unfulfilledRequest[rand() % unfulfilledRequest.size()];
+//			else frame /= 2;
+//			o->SetFrame(frame);
+//
+//			// Random spawn position
+//			int min = (int)(setting->screenWidth/3);
+//			int max = (int)(setting->screenWidth*2/3 - o->GetWidth());
+//			float x = (float)(rand() % (max - min + 1) + min);
+//			float y = setting->screenHeight + o->GetHeight();
+//			o->SetPosition(x, y);
+//			spawnCount++;
+//		}
+//	}
+//}
 
 string  Engine::CookNCollect::FormatScore(int score) {
 	ostringstream oss;

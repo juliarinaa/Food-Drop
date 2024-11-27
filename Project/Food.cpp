@@ -13,7 +13,7 @@ Engine::Food::~Food()
 
 }
 
-void Engine::Food::Update(float deltaTime)
+void Engine::Food::Update(float deltaTime, float velocity)
 {
 	if (state == Engine::FoodState::DIE) {
 		return;
@@ -21,18 +21,16 @@ void Engine::Food::Update(float deltaTime)
 
 	float x = GetX();
 	float y = GetY();
-	float yVelocity = 0.2f;
 
 	if ((Engine::FoodState::SPAWN == state && y + GetHeight() <= 0) ||
 		(Engine::FoodState::CATCHED == state && y <= 0))
 	{
-		yVelocity = 0;
+		velocity = 0;
 		state = Engine::FoodState::DIE;
 	}
 
-	y -= yVelocity * deltaTime;
+	y -= velocity * deltaTime;
 	sprite->SetPosition(x, y);
-	sprite->Update(deltaTime);
 }
 
 void Engine::Food::Draw()

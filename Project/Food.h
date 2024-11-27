@@ -15,7 +15,7 @@ namespace Engine {
 	public:
 		Food(Sprite* sprite);
 		~Food();
-		void Update(float deltaTime);
+		void Update(float deltaTime, float velocity);
 		void Draw();
 		Food* SetPosition(float x, float y);
 		Food* SetSpawn();
@@ -35,6 +35,7 @@ namespace Engine {
 		Sprite* sprite = NULL;
 		FoodState state;
 		float groundDur = 0, groundTime = 0, x = 0, y = 0;
+	private:
 	};
 
 }
