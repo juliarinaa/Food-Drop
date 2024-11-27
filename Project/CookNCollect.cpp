@@ -22,6 +22,8 @@ void Engine::CookNCollect::Init()
 	// Sound Effect
 	correctSound = (new Sound("correct.wav"))->SetVolume(100);
 	wrongSound = (new Sound("wrong.wav"))->SetVolume(100);
+	completeSound = (new Sound("bonus point.wav"))->SetVolume(100);
+	changeNoteSound = (new Sound("flipping2.wav"))->SetVolume(100);
 	music = (new Music("00 lolurio - Everyday Life.ogg"))->SetVolume(70)->Play(true);
 
 	// Basket
@@ -35,14 +37,14 @@ void Engine::CookNCollect::Init()
 	maxXBasket = (setting->screenWidth * 2 / 3 - basketSprite->GetScaleWidth());
 
 	// dot buat debugging aj
-	dotTexture = new Texture("dot.png");
+	/*dotTexture = new Texture("dot.png");*/
 	/*dot = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);*/
 	//dot->SetPosition(50, 100);
 
-	dotSprite1 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
+	/*dotSprite1 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
 	dotSprite2 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
 	dotSprite3 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
-	dotSprite4 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
+	dotSprite4 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);*/
 	
 	// Spawn setting
 	maxSpawnTime = 1000;
@@ -83,33 +85,39 @@ void Engine::CookNCollect::Init()
 	//notesSprite->SetPosition(setting->screenWidth * 41 / 60 + (setting->screenWidth * 19 / 60 - notesSprite->GetScaleWidth()) / 2, (setting->screenHeight - notesSprite->GetScaleHeight()) / 2);
 	notesSprite->SetPosition((setting->screenWidth * 19 / 60 - notesSprite->GetScaleWidth()) / 2, setting->screenHeight - notesSprite->GetScaleHeight());
 
-	foodTypeAmount = (std::rand() % 3) + 1;
-
 	// Order text setting
 	orderTitle = (new Text("ARCADECLASSIC.ttf", 27, defaultTextShader));
 	orderTitle->SetColor(0, 0, 0)->SetPosition(notesSprite->GetPosition().x + notesSprite->GetScaleWidth() / 3.5, setting->screenHeight - notesSprite->GetScaleHeight() / 3);
 	orderTitle->SetText("Order");
-
+	fixOrderTitleY = orderTitle->GetPosition().y;
 	
 	// tekstur untuk checklist
 	Texture* checklistTexture = new Texture("checklist.png");
 	
-	// set request
-	for (size_t i = 1; i <= foodTypeAmount; i++)
+
+	// Set request
+	foodTypeAmount = (std::rand() % 3) + 1;
+	for (size_t i = 1; i <= 3; i++)
 	{
-		int foodAmount = (std::rand() % 9) + 1;
-		int frame = rand() % 9;
-		// meriksa apakah makanannya yang dipilih itu udah ada sebelumnya dalam request
-		while(request.count(frame) == 1){
-			frame = rand() % 9;
-		}
 		//Sprite* foodSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(3)->SetFrame(frame)->SetPosition(notesSprite->GetPosition().x + notesSprite->GetScaleWidth() / 7, setting->screenHeight - notesSprite->GetScaleHeight() * (13 + i * 14) / 60);
-		Sprite* foodSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(2.5)->SetFrame(frame)->SetPosition(notesSprite->GetPosition().x + notesSprite->GetScaleWidth() * 2 / 13, setting->screenHeight - notesSprite->GetScaleHeight() * (22 + i * 11) / 60);
+		Sprite* foodSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(2.5)->SetPosition(notesSprite->GetPosition().x + notesSprite->GetScaleWidth() * 2 / 13, setting->screenHeight - notesSprite->GetScaleHeight() * (22 + i * 11) / 60);
 		Sprite* checklistSprite = (new Sprite(checklistTexture, defaultSpriteShader, defaultQuad))->SetScale(0.08)->SetPosition(foodSprite->GetPosition().x + notesSprite->GetScaleWidth() / 2, foodSprite->GetPosition().y + foodSprite->GetScaleHeight() / 6);
 		Text* amountText = (new Text("ARCADECLASSIC.ttf", 25, defaultTextShader))->SetColor(0, 0, 0)->SetPosition(foodSprite->GetPosition().x + notesSprite->GetScaleWidth()/2, foodSprite->GetPosition().y + foodSprite->GetScaleHeight() / 3);
-		unfulfilledRequest.push_back(frame);
-		request.insert({frame, foodAmount});
-		requestAssets.push_back((new Request(foodSprite, checklistSprite, amountText))->SetAmount(foodAmount));
+		if (i <= foodTypeAmount) {
+			int foodAmount = (std::rand() % 3) + 1;
+			int frame = rand() % 9;
+			// meriksa apakah makanannya yang dipilih itu udah ada sebelumnya dalam request
+			while (request.count(frame) == 1) {
+				frame = rand() % 9;
+			}
+			unfulfilledRequest.push_back(frame);
+			foodSprite->SetFrame(frame);
+			request.insert({ frame, foodAmount });
+			requestAssets.push_back((new Request(foodSprite, checklistSprite, amountText))->SetAmount(foodAmount));
+		}
+		else {
+			requestAssets.push_back(new Request(foodSprite, checklistSprite, amountText));
+		}
 	}
 
 	// Add input
@@ -147,54 +155,120 @@ void Engine::CookNCollect::Update()
 	}
 
 	if (!gameOver) {
-		// Update all objects
-		for (Food* o : objects) {
-			o->Update(GetGameTime());
+		if(!allRequestFullfilled){
+			// Time to spawn objects
+			if (spawnDuration >= maxSpawnTime) {
+				SpawnObjects();
+				spawnDuration = 0;
+			}
+
+			// Count spawn duration
+			spawnDuration += GetGameTime();
+
+			// Update all objects
+			for (Food* o : objects) {
+				o->Update(GetGameTime());
 			
-			// detect coallision and update score
-			// kalo misal si makanan itu berada di deket keranjang dan dia blm menghilang dari 
-			// layar ataupun pernah ketangkap sebelumnya dan ada tabrakan dengan keranjang maka...
-			if (o->GetY() <= basketSprite->GetScaleHeight()
-				&& o->GetY() >= (basketSprite->GetScaleHeight() - 5) 
-				&& o->IsSpawn() 
-				&& o->GetBoundingBox()->CollideWith(basketSprite->GetBoundingBox())) {
+				// detect coallision and update score
+				// kalo misal si makanan itu berada di deket keranjang dan dia blm menghilang dari 
+				// layar ataupun pernah ketangkap sebelumnya dan ada tabrakan dengan keranjang maka...
+				if (o->GetY() <= basketSprite->GetScaleHeight()
+					&& o->GetY() >= (basketSprite->GetScaleHeight() - 5) 
+					&& o->IsSpawn() 
+					&& o->GetBoundingBox()->CollideWith(basketSprite->GetBoundingBox())) {
 				
-				// Cek apakah makanan ini sesuai dengan request
-				if (request.count(o->GetFrameIndex()) > 0) {
+					// Cek apakah makanan ini sesuai dengan request
+					if (request.count(o->GetFrameIndex()) > 0) {
 
-					// Makanan sesuai permintaan
-					int& remainingAmount = request[o->GetFrameIndex()];
-					if (remainingAmount > 0) {
-						remainingAmount--;
-						int i = 0;
-						for (; i < 3; i++)
-						{
-							if (requestAssets[i]->GetFoodFrameIndex() == o->GetFrameIndex()) {
-								requestAssets[i]->SetAmount(remainingAmount);
-								break;
+						// Makanan sesuai permintaan
+						int& remainingAmount = request[o->GetFrameIndex()];
+						if (remainingAmount > 0) {
+							remainingAmount--;
+							int i = 0;
+							for (; i < 3; i++)
+							{
+								if (requestAssets[i]->GetFoodFrameIndex() == o->GetFrameIndex()) {
+									requestAssets[i]->SetAmount(remainingAmount);
+									break;
+								}
 							}
-						}
-						correctSound->Play(false);
-						score += 100;
-						scoreText->SetText(FormatScore(score));
+							score += 100;
+							scoreText->SetText(FormatScore(score));
 
-						// Hapus dari request jika jumlahnya habis
-						if (remainingAmount == 0) {
-							request.erase(o->GetFrameIndex());
-							requestAssets[i]->SetFullfilled();
+							// Hapus dari request jika jumlahnya habis
+							if (remainingAmount == 0) {
+								request.erase(o->GetFrameIndex());
+								requestAssets[i]->SetFullfilled();
+								auto it = std::find(unfulfilledRequest.begin(), unfulfilledRequest.end(), o->GetFrameIndex());
+								if (it != unfulfilledRequest.end()) unfulfilledRequest.erase(it);
+								// kalo requestnya udah abis, food spawn-nya diilangin dari layar
+								if (request.empty()) {
+									completeSound->Play(false);
+									allRequestFullfilled = true;
+									for (Food* o : objects) o->SetDie();
+									break;
+								} 
+							}
+							correctSound->Play(false);
 						}
 					}
-				}
-				else {
-					// Makanan salah
-					wrongSound->Play(false);
-					for (int i = 2; i >= 0; i--) {
-						if (hearts[i]->IsDie()) continue;
-						hearts[i]->PlayAnim("gone")->SetDie();
-						break;
+					else {
+						// Makanan salah
+						wrongSound->Play(false);
+						for (int i = 2; i >= 0; i--) {
+							if (hearts[i]->IsDie()) continue;
+							hearts[i]->PlayAnim("gone")->SetDie();
+							break;
+						}
 					}
+					o->SetCatched();
 				}
-				o->SetCatched();
+			}
+		}
+		else {
+			float notesY = notesSprite->GetPosition().y;
+			float orderTitleY = orderTitle->GetPosition().y;
+			float yVelocity = 0.2f;
+			if (moveUp) {
+				notesY += yVelocity * GetGameTime();
+				orderTitleY += yVelocity * GetGameTime();
+				if (notesY >= setting->screenHeight) {
+					moveUp = false;
+					foodTypeAmount = (std::rand() % 3) + 1;
+					for (size_t i = 0; i < 3; i++)
+					{
+						if (i < foodTypeAmount) {
+							int foodAmount = (std::rand() % 3) + 1;
+							int frame = rand() % 9;
+							// meriksa apakah makanannya yang dipilih itu udah ada sebelumnya dalam request
+							while (request.count(frame) == 1) {
+								frame = rand() % 9;
+							}
+							unfulfilledRequest.push_back(frame);
+							requestAssets[i]->SetFoodFrame(frame)->SetAmount(foodAmount);
+							request.insert({ frame, foodAmount });
+						}
+						else {
+							requestAssets[i]->SetDie();
+						}
+					}
+					//changeNoteSound->Play(false);
+				}
+			}
+			else {
+				notesY -= yVelocity * GetGameTime();
+				orderTitleY -= yVelocity * GetGameTime();
+				if (notesY <= setting->screenHeight - notesSprite->GetScaleHeight()) {
+					allRequestFullfilled = false;
+					moveUp = true;
+					notesY = setting->screenHeight - notesSprite->GetScaleHeight();
+				} 
+				if (orderTitleY < fixOrderTitleY) orderTitleY = fixOrderTitleY;
+			}
+			notesSprite->SetYPosition(notesY);
+			orderTitle->SetYPosition(orderTitleY);
+			for (Request* requestAsset : requestAssets) {
+				requestAsset->Update(GetGameTime(), moveUp);
 			}
 		}
 
@@ -220,27 +294,18 @@ void Engine::CookNCollect::Update()
 				basketSprite->SetPosition(x, y)->Update(GetGameTime());
 			}
 		}
-
-		// Time to spawn objects
-		if (spawnDuration >= maxSpawnTime) {
-			SpawnObjects();
-			spawnDuration = 0;
-		}
-
-		// Count spawn duration
-		spawnDuration += GetGameTime();
 	}
 
-	//Shape for debug
-	BoundingBox* bb = objects[1]->GetBoundingBox();
-	dotSprite1->SetPosition(bb->GetVertices()[0].x - (0.5f * dotSprite1->GetScaleWidth()),
-		bb->GetVertices()[0].y - (0.5f * dotSprite1->GetScaleHeight()));
-	dotSprite2->SetPosition(bb->GetVertices()[1].x - (0.5f * dotSprite2->GetScaleWidth()),
-		bb->GetVertices()[1].y - (0.5f * dotSprite2->GetScaleHeight()));
-	dotSprite3->SetPosition(bb->GetVertices()[2].x - (0.5f * dotSprite3->GetScaleWidth()),
-		bb->GetVertices()[2].y - (0.5f * dotSprite3->GetScaleHeight()));
-	dotSprite4->SetPosition(bb->GetVertices()[3].x - (0.5f * dotSprite4->GetScaleWidth()),
-		bb->GetVertices()[3].y - (0.5f * dotSprite3->GetScaleHeight()));
+	////Shape for debug
+	//BoundingBox* bb = objects[1]->GetBoundingBox();
+	//dotSprite1->SetPosition(bb->GetVertices()[0].x - (0.5f * dotSprite1->GetScaleWidth()),
+	//	bb->GetVertices()[0].y - (0.5f * dotSprite1->GetScaleHeight()));
+	//dotSprite2->SetPosition(bb->GetVertices()[1].x - (0.5f * dotSprite2->GetScaleWidth()),
+	//	bb->GetVertices()[1].y - (0.5f * dotSprite2->GetScaleHeight()));
+	//dotSprite3->SetPosition(bb->GetVertices()[2].x - (0.5f * dotSprite3->GetScaleWidth()),
+	//	bb->GetVertices()[2].y - (0.5f * dotSprite3->GetScaleHeight()));
+	//dotSprite4->SetPosition(bb->GetVertices()[3].x - (0.5f * dotSprite4->GetScaleWidth()),
+	//	bb->GetVertices()[3].y - (0.5f * dotSprite3->GetScaleHeight()));
 }
 
 void Engine::CookNCollect::Render()
@@ -250,10 +315,12 @@ void Engine::CookNCollect::Render()
 	overlayWhiteSprite->Draw();
 	notesSprite->Draw();
 
-	// Render all objects
-	for (Food* o : objects) {
-		o->Draw();
+	if (!allRequestFullfilled) {
+		for (Food* o : objects) {
+			o->Draw();
+		}
 	}
+
 	for (Heart* o : hearts) {
 		o->Draw();
 	}
@@ -263,10 +330,10 @@ void Engine::CookNCollect::Render()
 	
 	// dot->Draw();
 
-	dotSprite1->Draw();
-	dotSprite2->Draw();
-	dotSprite3->Draw();
-	dotSprite4->Draw();
+	//dotSprite1->Draw();
+	//dotSprite2->Draw();
+	//dotSprite3->Draw();
+	//dotSprite4->Draw();
 
 	for (Request* o : requestAssets) {
 		o->Draw();
@@ -296,8 +363,8 @@ void Engine::CookNCollect::SpawnObjects()
 			// Set state to spawn
 			o->SetSpawn();
 
-			int frame = rand() % 20;
-			if (frame % 2 != 0 || frame > 17) frame = requestAssets[rand() % requestAssets.size()]->GetFoodFrameIndex();
+			int frame = rand() % 17;
+			if (frame % 2 != 0) frame = unfulfilledRequest[rand() % unfulfilledRequest.size()];
 			else frame /= 2;
 			o->SetFrame(frame);
 
@@ -317,6 +384,3 @@ string  Engine::CookNCollect::FormatScore(int score) {
 	oss << std::setfill('0') << std::setw(7) << score;
 	return oss.str();
 }
-
-
-

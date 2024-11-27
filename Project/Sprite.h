@@ -31,6 +31,8 @@ namespace Engine {
 		Sprite* SetAnimationDuration(float maxFrameDuration);
 		Sprite* SetEnableAnimation(bool enableAnimation);
 		Sprite* SetPosition(float x, float y);
+		Sprite* SetYPosition(float y);
+		Sprite* SetXPosition(float x);
 		Sprite* SetRotation(float degree);
 		Sprite* SetNumXFrames(int numXFrames);
 		Sprite* SetNumYFrames(int numYFrames);

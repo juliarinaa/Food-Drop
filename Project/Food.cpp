@@ -62,6 +62,12 @@ Engine::Food* Engine::Food::SetCatched()
 	return this;
 }
 
+Engine::Food* Engine::Food::SetDie()
+{
+	this->state = Engine::FoodState::DIE;
+	return this;
+}
+
 float Engine::Food::GetWidth()
 {
 	return sprite->GetScaleWidth();

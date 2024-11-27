@@ -20,6 +20,23 @@ Engine::Text* Engine::Text::SetColor(float r, float g, float b)
 	return this;
 }
 
+vec2 Engine::Text::GetPosition()
+{
+	return position;
+}
+
+Engine::Text* Engine::Text::SetXPosition(float x)
+{
+	position.x = x;
+	return this;
+}
+
+Engine::Text* Engine::Text::SetYPosition(float y)
+{
+	position.y = y;
+	return this;
+}
+
 Engine::Text* Engine::Text::SetPosition(float x, float y)
 {
 	position = vec2(x, y);

@@ -19,6 +19,7 @@ namespace Engine {
 		void Draw();
 		Food* SetPosition(float x, float y);
 		Food* SetSpawn();
+		Food* SetDie();
 		Food* SetCatched();
 		float GetWidth();
 		float GetHeight();

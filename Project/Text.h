@@ -28,9 +28,12 @@ namespace Engine {
 		Text* SetScale(float scale);
 		Text* SetColor(float r, float g, float b);
 		Text* SetPosition(float x, float y);
+		Text* SetYPosition(float y);
+		Text* SetXPosition(float x);
 		Text* SetText(string text);
 		void Draw();
 		uint GetFontSize();
+		vec2 GetPosition();
 		float GetScale();
 	private:
 		void Init();

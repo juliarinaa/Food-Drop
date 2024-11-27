@@ -39,7 +39,6 @@ namespace Engine {
 		map<int, int> request;
 		vector<Request*> requestAssets;
 		int foodTypeAmount = 0;
-		bool allRequestFulfilled = false;
 		vector<int> unfulfilledRequest;
 
 		// Basket
@@ -62,24 +61,30 @@ namespace Engine {
 		Text* scoreTitle = NULL;
 		Text* scoreText = NULL;
 		Text* orderTitle = NULL;
+		float fixOrderTitleY = 0;
 
 		string FormatScore(int score);
 		int score = 0;
 		
 		bool gameOver = false;
+		bool moveUp = true;
+		bool allRequestFullfilled = false;
 
 		Sound* correctSound = NULL;
 		Sound* wrongSound = NULL;
+		Sound* completeSound = NULL;
+		Sound* changeNoteSound = NULL;
 		Music* music = NULL;
 
 		//debugging dot
 		Engine::Texture* dotTexture = NULL;
+		
 		Engine::Sprite* dot = NULL;
 
-		Sprite* dotSprite1 = NULL;
-		Sprite* dotSprite2 = NULL;
-		Sprite* dotSprite3 = NULL;
-		Sprite* dotSprite4 = NULL;
+		//Sprite* dotSprite1 = NULL;
+		//Sprite* dotSprite2 = NULL;
+		//Sprite* dotSprite3 = NULL;
+		//Sprite* dotSprite4 = NULL;
 	};
 }
 #endif

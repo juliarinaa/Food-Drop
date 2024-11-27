@@ -124,6 +124,18 @@ Engine::Sprite* Sprite::SetPosition(float x, float y)
 	return this;
 }
 
+Engine::Sprite* Sprite::SetXPosition(float x)
+{
+	position.x = x;
+	return this;
+}
+
+Engine::Sprite* Sprite::SetYPosition(float y)
+{
+	position.y = y;
+	return this;
+}
+
 Engine::Sprite* Sprite::SetRotation(float degree)
 {
 	this->degree = degree;
