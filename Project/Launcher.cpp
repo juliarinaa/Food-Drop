@@ -20,8 +20,8 @@
 
 int main(int argc, char** argv) {
 	Engine::Setting* setting = new Engine::Setting();
-	setting->screenWidth = 1280;
-	setting->screenHeight = 720;
+	setting->screenWidth = 640;
+	setting->screenHeight = 360;
 	setting->windowFlag = Engine::WindowFlag::FULLSCREEN;
 	setting->vsync = false;
 	setting->targetFrameRate = 75;

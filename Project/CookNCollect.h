@@ -28,6 +28,7 @@ namespace Engine {
 		Engine::Texture* texture = NULL;
 		Engine::Sprite* CreateSprite();
 		Engine::Sprite* backgroundSprite = NULL;
+		Engine::Sprite* scoreBoardSprite = NULL;
 		Engine::Texture* overlayBlackTexture = NULL;
 		Engine::Sprite* overlayBlackSprite = NULL;
 		Engine::Texture* overlayWhiteTexture = NULL;
@@ -65,7 +66,10 @@ namespace Engine {
 		float fixOrderTitleY = 0;
 
 		string FormatScore(int score);
-		int score = 0;
+		Text* bonusScoreText = NULL;
+		int score = 0, bonusScore = 0;
+		float bonusScoreDuration = 1000;
+		bool showBonusScore = false;
 		
 		bool gameOver = false;
 		bool moveUp = true;

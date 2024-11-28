@@ -35,6 +35,8 @@ namespace Engine {
 		uint GetFontSize();
 		vec2 GetPosition();
 		float GetScale();
+		int GetHeight();
+		int GetWidth();
 	private:
 		void Init();
 		map<GLchar, TextCharacter> TextCharacters;
@@ -46,6 +48,8 @@ namespace Engine {
 		float scale = 1.0f;
 		vec2 position = vec2(0, 0);
 		string text = "";
+		int height = 0;
+		int width = 0;
 	};
 
 }

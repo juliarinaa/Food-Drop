@@ -19,6 +19,16 @@ void Engine::CookNCollect::Init()
 {
 	srand(std::time(0));
 
+	//dot buat debugging aj
+	/*dotTexture = new Texture("dot.png");
+	dot = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);*/
+	/*dot->SetPosition(setting->screenWidth / 2, basketSprite->GetScaleHeight())*/;
+
+	/*dotSprite1 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
+	dotSprite2 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
+	dotSprite3 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
+	dotSprite4 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);*/
+
 	// Sound Effect
 	correctSound = (new Sound("correct.wav"))->SetVolume(100);
 	wrongSound = (new Sound("wrong.wav"))->SetVolume(100);
@@ -28,30 +38,20 @@ void Engine::CookNCollect::Init()
 
 	// Basket
 	texture = new Texture("basket.png");
-	basketSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetScale(0.25);
+	basketSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetScale(setting->screenWidth * 0.0001953125);
 	basketSprite->SetPosition(setting->screenWidth / 2 - basketSprite->GetScaleWidth() / 2, 0);
-
+	
 	inputManager->AddInputMapping("slide-left", SDLK_LEFT)->AddInputMapping("slide-right", SDLK_RIGHT);
 
 	minXBasket = (setting->screenWidth / 3);
 	maxXBasket = (setting->screenWidth * 2 / 3 - basketSprite->GetScaleWidth());
 
-	// dot buat debugging aj
-	/*dotTexture = new Texture("dot.png");
-	dot = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
-	dot->SetPosition(setting->screenWidth / 2, basketSprite->GetScaleHeight());*/
-
-	/*dotSprite1 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
-	dotSprite2 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
-	dotSprite3 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);
-	dotSprite4 = new Sprite(dotTexture, defaultSpriteShader, defaultQuad);*/
-	
 	// Spawn setting
 	maxSpawnTime = 1000;
 	numObjectPerSpawn = 1;
 	numObjectsInPool = 100;
 
-	// Load ingredient texture
+	// Set food 
 	texture = new Texture("foods.png");
 	for (int i = 0; i < numObjectsInPool; i++) {
 		Food* o = new Food(CreateSprite());
@@ -78,7 +78,7 @@ void Engine::CookNCollect::Init()
 	// Set posisi overlay
 	overlayWhiteSprite->SetPosition(posX, posY);
 
-	//Set notes for request
+	// Set notes for request
 	Texture* notesTexture = new Texture("notes.png");
 	notesSprite = (new Sprite(notesTexture, defaultSpriteShader, defaultQuad));
 	notesSprite->SetSize(setting->screenWidth * 9 / 60, notesSprite->GetScaleHeight() / notesSprite->GetScaleWidth() * setting->screenWidth * 9 / 60);
@@ -86,9 +86,9 @@ void Engine::CookNCollect::Init()
 	notesSprite->SetPosition((setting->screenWidth * 19 / 60 - notesSprite->GetScaleWidth()) / 2, setting->screenHeight - notesSprite->GetScaleHeight());
 
 	// Order text setting
-	orderTitle = (new Text("ARCADECLASSIC.ttf", 27, defaultTextShader));
-	orderTitle->SetColor(0, 0, 0)->SetPosition(notesSprite->GetPosition().x + notesSprite->GetScaleWidth() / 3.5, setting->screenHeight - notesSprite->GetScaleHeight() / 3);
-	orderTitle->SetText("Order");
+	orderTitle = (new Text("ARCADECLASSIC.ttf", static_cast<int>(round(setting->screenWidth * 0.02109375)), defaultTextShader));
+	orderTitle->SetText("order");
+	orderTitle->SetColor(0, 0, 0)->SetPosition(notesSprite->GetPosition().x + (notesSprite->GetScaleWidth() - orderTitle->GetWidth())/ 2, setting->screenHeight - notesSprite->GetScaleHeight() / 3);
 	fixOrderTitleY = orderTitle->GetPosition().y;
 	
 	// tekstur untuk checklist
@@ -96,13 +96,20 @@ void Engine::CookNCollect::Init()
 	
 
 	// Set request
-	foodTypeAmount = (std::rand() % 3) + 1;
+	/*foodTypeAmount = (std::rand() % 3) + 1;*/
+	foodTypeAmount = 3;
 	for (size_t i = 1; i <= 3; i++)
 	{
-		//Sprite* foodSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(3)->SetFrame(frame)->SetPosition(notesSprite->GetPosition().x + notesSprite->GetScaleWidth() / 7, setting->screenHeight - notesSprite->GetScaleHeight() * (13 + i * 14) / 60);
-		Sprite* foodSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(2.5)->SetPosition(notesSprite->GetPosition().x + notesSprite->GetScaleWidth() * 2 / 13, setting->screenHeight - notesSprite->GetScaleHeight() * (22 + i * 11) / 60);
-		Sprite* checklistSprite = (new Sprite(checklistTexture, defaultSpriteShader, defaultQuad))->SetScale(0.08)->SetPosition(foodSprite->GetPosition().x + notesSprite->GetScaleWidth() / 2, foodSprite->GetPosition().y + foodSprite->GetScaleHeight() / 6);
-		Text* amountText = (new Text("ARCADECLASSIC.ttf", 25, defaultTextShader))->SetColor(0, 0, 0)->SetPosition(foodSprite->GetPosition().x + notesSprite->GetScaleWidth()/2, foodSprite->GetPosition().y + foodSprite->GetScaleHeight() / 3);
+		/*Sprite* foodSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(setting->screenWidth * 0.001953125)->SetPosition(notesSprite->GetPosition().x + notesSprite->GetScaleWidth() * 2 / 13, setting->screenHeight - notesSprite->GetScaleHeight() * (22 + i * 11) / 60);*/
+		Sprite* foodSprite = (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(setting->screenWidth * 0.001953125);
+		foodSprite->SetPosition(notesSprite->GetPosition().x + notesSprite->GetScaleWidth() * 2 / 13, orderTitle->GetPosition().y - i * (foodSprite->GetScaleHeight() + notesSprite->GetScaleHeight() * 0.022) - notesSprite->GetScaleHeight() * 0.046);
+		
+		Sprite* checklistSprite = (new Sprite(checklistTexture, defaultSpriteShader, defaultQuad))->SetScale(setting->screenWidth * 0.0000625);
+		checklistSprite->SetPosition(foodSprite->GetPosition().x + notesSprite->GetScaleWidth() / 2, foodSprite->GetPosition().y + (foodSprite->GetScaleHeight() - checklistSprite->GetScaleHeight()) / 2);
+		
+		Text* amountText = (new Text("ARCADECLASSIC.ttf", static_cast<int>(round(setting->screenWidth * 0.01953125)), defaultTextShader))->SetColor(0, 0, 0);
+		amountText->SetPosition(foodSprite->GetPosition().x + notesSprite->GetScaleWidth() / 2, foodSprite->GetPosition().y + (foodSprite->GetScaleHeight() - amountText->GetHeight()) / 2);
+
 		if (i <= foodTypeAmount) {
 			int foodAmount = (std::rand() % 3) + 1;
 			int frame = rand() % 9;
@@ -126,26 +133,35 @@ void Engine::CookNCollect::Init()
 	//load heart texture
 	texture = new Texture("heart.png");
 	for (int i = 0; i < 3; i++) {
-		Heart* o = new Heart((new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(5)->SetNumYFrames(1)->AddAnimation("gone", 0, 4)->SetScale(2.5)->SetAnimationDuration(150));
+		Heart* o = new Heart((new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(5)->SetNumYFrames(1)->AddAnimation("gone", 0, 4)->SetScale(setting->screenWidth * 0.001953125)->SetAnimationDuration(150));
 		hearts.push_back(o);
 	}
 
 	// set heart position
 	for (size_t i = 0; i < 3; i++)
 	{
-		hearts[i]->SetPosition(setting->screenWidth - (i + 1) * hearts[i]->GetWidth() - (25 + i*10), setting->screenHeight - hearts[i]->GetHeight()-25);
+		hearts[i]->SetPosition(setting->screenWidth * 0.98 - (i + 1) * hearts[i]->GetWidth() - (i* setting->screenWidth * 0.0078125), setting->screenHeight * 0.96 - hearts[i]->GetHeight());
 	}
 
+	// Set Score Board
+	Texture* scoreBoardTexture = new Texture("mini_notes.png");
+	scoreBoardSprite = (new Sprite(scoreBoardTexture, defaultSpriteShader, defaultQuad))->SetScale(setting->screenWidth * 0.00078125);
+	scoreBoardSprite->SetPosition(setting->screenWidth * 41 / 60 + (setting->screenWidth * 19 / 60 - scoreBoardSprite->GetScaleWidth()) / 2, setting->screenHeight * 0.7 - scoreBoardSprite->GetScaleHeight());
+
 	// Score title setting
-	scoreTitle = new Text("ARCADECLASSIC.ttf", 40, defaultTextShader);
-	scoreTitle->SetColor(255, 255, 255)->SetPosition(setting->screenWidth - hearts[0]->GetWidth() - 100, setting->screenHeight * 9 / 12);
+	scoreTitle = new Text("ARCADECLASSIC.ttf", setting->screenWidth * 0.0234375, defaultTextShader);
 	scoreTitle->SetText("SCORE");  // Menampilkan teks "SCORE"
+	scoreTitle->SetColor(0, 0, 0)->SetPosition(scoreBoardSprite->GetPosition().x + (scoreBoardSprite->GetScaleWidth() - scoreTitle->GetWidth()) / 2, scoreBoardSprite->GetPosition().y + scoreBoardSprite->GetScaleHeight() * 0.55);
 
 	// Score text setting
-	scoreText = new Text("ARCADECLASSIC.ttf", 40, defaultTextShader);
-	scoreText->SetColor(255, 255, 255)->SetPosition(setting->screenWidth - hearts[0]->GetWidth() - 145, setting->screenHeight *  25 / 36);
+	scoreText = new Text("ARCADECLASSIC.ttf", setting->screenWidth * 0.03125, defaultTextShader);
 	scoreText->SetText("0000000");
+	scoreText->SetColor(0, 0, 0)->SetPosition(scoreBoardSprite->GetPosition().x + (scoreBoardSprite->GetScaleWidth() - scoreText->GetWidth()) / 2, scoreTitle->GetPosition().y - scoreText->GetHeight() - setting->screenHeight * 0.03);
 
+	// Bonus Score text setting
+	bonusScoreText = new Text("ARCADECLASSIC.ttf", setting->screenWidth * 0.0234375, defaultTextShader);
+	bonusScoreText->SetColor(106, 193, 97)->SetPosition(scoreBoardSprite->GetPosition().x + (scoreBoardSprite->GetScaleWidth() - bonusScoreText->GetWidth()) / 2, scoreText->GetPosition().y - bonusScoreText->GetHeight() - setting->screenHeight * 0.025);
+	
 	currFood = SpawnObjects();
 }
 
@@ -191,6 +207,7 @@ void Engine::CookNCollect::Update()
 								}
 							}
 							score += 100;
+							bonusScore += 50;
 							scoreText->SetText(FormatScore(score));
 
 							// Hapus dari request jika jumlahnya habis
@@ -204,6 +221,10 @@ void Engine::CookNCollect::Update()
 									completeSound->Play(false);
 									allRequestFullfilled = true;
 									for (Food* o : objects) o->SetDie();
+									bonusScoreText->SetText("bonus " + std::to_string(bonusScore));
+									bonusScoreText->SetXPosition(scoreBoardSprite->GetPosition().x + (scoreBoardSprite->GetScaleWidth() - bonusScoreText->GetWidth()) / 2);
+									scoreText->SetText(FormatScore(score + bonusScore));
+									showBonusScore = true;
 									break;
 								} 
 							}
@@ -261,6 +282,7 @@ void Engine::CookNCollect::Update()
 					moveUp = true;
 					notesY = setting->screenHeight - notesSprite->GetScaleHeight();
 					foodVelocity += 0.05f;
+					bonusScore = 0;
 					currFood = SpawnObjects();
 				} 
 				if (orderTitleY < fixOrderTitleY) orderTitleY = fixOrderTitleY;
@@ -314,6 +336,7 @@ void Engine::CookNCollect::Render()
 	//overlayBlackSprite->Draw();
 	overlayWhiteSprite->Draw();
 	notesSprite->Draw();
+	scoreBoardSprite->Draw();
 
 	if (!allRequestFullfilled) {
 		for (Food* o : objects) {
@@ -328,8 +351,16 @@ void Engine::CookNCollect::Render()
 	scoreTitle->Draw();
 	scoreText->Draw();
 	
+	if (showBonusScore && bonusScoreDuration != 0) {
+		bonusScoreText->Draw();
+		bonusScoreDuration -= GetGameTime();
+		if(bonusScoreDuration <= 0){
+			showBonusScore = false;
+			bonusScoreDuration = 1000;
+		}
+	}
+	
 	//dot->Draw();
-
 	//dotSprite1->Draw();
 	//dotSprite2->Draw();
 	//dotSprite3->Draw();
@@ -347,7 +378,7 @@ void Engine::CookNCollect::Render()
 */
 Engine::Sprite* Engine::CookNCollect::CreateSprite()
 {
-	return (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(4);
+	return (new Sprite(texture, defaultSpriteShader, defaultQuad))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(setting->screenWidth * 0.003125);
 
 }
 
@@ -380,34 +411,6 @@ Engine::Food* Engine::CookNCollect::SpawnObjects()
 	}
 	return currFood;
 }
-
-//void Engine::CookNCollect::SpawnObjects()
-//{
-//	//Find Die object to reuse for spawning
-//	int spawnCount = 0;
-//	for (Food* o : objects) {
-//		if (spawnCount == numObjectPerSpawn) {
-//			break;
-//		}
-//		if (o->IsDie()) {
-//			// Set state to spawn
-//			o->SetSpawn();
-//
-//			int frame = rand() % 17;
-//			if (frame % 2 != 0) frame = unfulfilledRequest[rand() % unfulfilledRequest.size()];
-//			else frame /= 2;
-//			o->SetFrame(frame);
-//
-//			// Random spawn position
-//			int min = (int)(setting->screenWidth/3);
-//			int max = (int)(setting->screenWidth*2/3 - o->GetWidth());
-//			float x = (float)(rand() % (max - min + 1) + min);
-//			float y = setting->screenHeight + o->GetHeight();
-//			o->SetPosition(x, y);
-//			spawnCount++;
-//		}
-//	}
-//}
 
 string  Engine::CookNCollect::FormatScore(int score) {
 	ostringstream oss;

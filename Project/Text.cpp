@@ -43,9 +43,45 @@ Engine::Text* Engine::Text::SetPosition(float x, float y)
 	return this;
 }
 
+int Engine::Text::GetHeight()
+{
+	return height;
+}
+
+int Engine::Text::GetWidth()
+{
+	return width;
+}
+
 Engine::Text* Engine::Text::SetText(string text)
 {
 	this->text = text;
+	int totalWidth = 0;
+
+	// Menentukan lebar text
+	// init freetype
+	FT_Library ft;
+	if (FT_Init_FreeType(&ft)) {
+		throw ("ERROR::FREETYPE: Could not init FreeType Library");
+	}
+	FT_Face face;
+	if (FT_New_Face(ft, fontName, 0, &face)) {
+		throw ("ERROR::FREETYPE: Failed to load font");
+	}
+
+	FT_Set_Pixel_Sizes(face, 0, fontSize);
+
+	for (char c : text) {
+		if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
+			throw "ERROR::FREETYTPE: Failed to load Glyph";
+			continue;
+		}
+		totalWidth += (face->glyph->advance.x >> 6);
+	}
+
+	FT_Done_Face(face);
+	FT_Done_FreeType(ft);
+	width = totalWidth;
 	return this;
 }
 
@@ -150,6 +186,7 @@ void Engine::Text::Init()
 			GL_UNSIGNED_BYTE,
 			face->glyph->bitmap.buffer
 		);
+		
 		// Set texture options
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -164,6 +201,9 @@ void Engine::Text::Init()
 		};
 		TextCharacters.insert(pair<GLchar, TextCharacter>(c, character));
 	}
+
+	// Tambahan
+	height = (face->ascender - face->descender) / face->units_per_EM * fontSize / 2;
 
 	FT_Done_Face(face);
 	FT_Done_FreeType(ft);

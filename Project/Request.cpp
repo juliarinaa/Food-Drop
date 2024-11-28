@@ -58,9 +58,8 @@ int Engine::Request::GetFoodFrameIndex()
 Engine::Request* Engine::Request::SetAmount(int amount) 
 {
 	std::string amountStr = "x " + std::to_string(amount);
-	std::cout << "Updating amount: " << amountStr << std::endl;  // Debugging line
-	this->amountText->SetText(amountStr);
-	this->state = Engine::RequestState::UNFULLFILLED;
+	amountText->SetText(amountStr);
+	state = Engine::RequestState::UNFULLFILLED;
 	return this;
 }
 
