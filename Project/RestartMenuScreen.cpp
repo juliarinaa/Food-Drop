@@ -1,11 +1,12 @@
 #include "RestartMenuScreen.h"
-#include "CookNCollect.h"
+#include "GamePlayScreen.h"
 
 Engine::RestartMenuScreen::RestartMenuScreen()
 {
     text = NULL;
     bgSprite = NULL;
     textGameOver = NULL;
+    finalScore = 0;
 
 }
 
@@ -58,9 +59,6 @@ void Engine::RestartMenuScreen::Init()
 
 void Engine::RestartMenuScreen::Update()
 {
-    // Update background color
-    game->SetBackgroundColor(52, 155, 235);
-
     // Navigate through buttons
     if (game->GetInputManager()->IsKeyReleased("next")) {
         buttons[currentButtonIndex]->SetButtonState(Engine::ButtonState::NORMAL);
@@ -83,7 +81,7 @@ void Engine::RestartMenuScreen::Update()
             ScreenManager::GetInstance(game)->SetCurrentScreen("fooddrop"); // Kembali ke ingame
 
             // Panggil metode RestartGame() pada instance dari DinoGameScreen
-            CookNCollect* gameScreen = dynamic_cast<CookNCollect*>(ScreenManager::GetInstance(game)->GetCurrentScreen());
+            GamePlayScreen* gameScreen = dynamic_cast<GamePlayScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen());
             if (gameScreen) {
                 gameScreen->ResetGameState();
             }

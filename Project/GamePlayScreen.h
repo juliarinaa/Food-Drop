@@ -1,7 +1,8 @@
-#ifndef COOKNCOLLECT_H
-#define COOKNCOLLECT_H
+#ifndef GAMEPLAYSCREEN_H
+#define GAMEPLAYSCREEN_H
 
-#include "Game.h"
+#include "Screen.h"
+#include "ScreenManager.h"
 #include "Setting.h"
 #include "Texture.h"
 #include "Sprite.h"
@@ -14,17 +15,19 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
+#include "RestartMenuScreen.h"
 
 namespace Engine {
-	class CookNCollect :public Engine::Game
+	class GamePlayScreen :
+		public Engine::Screen
 	{
 	public:
-		CookNCollect(Setting* setting);
-		~CookNCollect();
-		virtual void Init();
-		virtual void Update();
-		virtual void Render();
-		virtual void ResetGameState();
+		GamePlayScreen();
+		~GamePlayScreen();
+		void Init();
+		void Update();
+		void Draw();
+		void ResetGameState();
 	private:
 		Engine::Texture* texture = NULL;
 		Engine::Sprite* CreateSprite();

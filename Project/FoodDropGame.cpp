@@ -1,6 +1,6 @@
 #include "FoodDropGame.h"
 #include "MainMenuScreen.h"
-#include "CookNCollect.h"
+#include "GamePlayScreen.h"
 #include "RestartMenuScreen.h"
 
 
@@ -15,8 +15,9 @@ Engine::FoodDropGame::~FoodDropGame()
 
 void Engine::FoodDropGame::Init()
 {
-	Engine::ScreenManager::GetInstance(this)->AddScreen("fooddrop", new CookNCollect())
-		->AddScreen("mainmenu", new MainMenuScreen())->AddScreen("restartmenu", new RestartMenuScreen())->SetCurrentScreen("mainmenu");
+	Engine::ScreenManager::GetInstance(this)->AddScreen("gameplay", new GamePlayScreen())
+		->AddScreen("mainmenu", new MainMenuScreen())->AddScreen("restartmenu", new RestartMenuScreen())
+		->AddScreen("restartmenu", new RestartMenuScreen())->SetCurrentScreen("mainmenu");
 
 }
 

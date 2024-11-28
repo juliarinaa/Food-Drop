@@ -11,30 +11,26 @@ void Engine::MainMenuScreen::Init()
 {
 	// Create a Texture
 	Texture* texture = new Texture("buttons.png");
-	Texture* bgTexture = new Texture("cafe.png");
+	Texture* bgTexture = new Texture("background_restaurant.png");
 	Texture* titleTexture = new Texture("title.png");
 
-	// Create Sprites
-	background = (new Sprite(bgTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))->SetPosition(0, 0);
-	background->SetSize(game->GetSettings()->screenWidth, background->GetScaleHeight() / background->GetScaleWidth() * game->GetSettings()->screenWidth - 60);
-
+	background = (new Sprite(bgTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))->SetSize((float)game->GetSettings()->screenWidth, (float)game->GetSettings()->screenHeight);
+	
 	Sprite* playSprite = (new Sprite(texture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
-		->SetNumXFrames(6)->SetScale(3)->SetNumYFrames(1)->AddAnimation("normal", 0, 0)->AddAnimation("hover", 0, 2)
+		->SetNumXFrames(6)->SetScale(game->GetSettings()->screenWidth * 0.001953125)->SetNumYFrames(1)->AddAnimation("normal", 0, 0)->AddAnimation("hover", 0, 2)
 		->AddAnimation("press", 0, 2)->SetAnimationDuration(400);
 
 	Sprite* exitSprite = (new Sprite(texture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
-		->SetNumXFrames(6)->SetScale(3)->SetNumYFrames(1)->AddAnimation("normal", 3, 3)->AddAnimation("hover", 3, 5)
+		->SetNumXFrames(6)->SetScale(game->GetSettings()->screenWidth * 0.001953125)->SetNumYFrames(1)->AddAnimation("normal", 3, 3)->AddAnimation("hover", 3, 5)
 		->AddAnimation("press", 3, 5)->SetAnimationDuration(400);
 
 	//Create Buttons
 	Button* playButton = new Button(playSprite, "play");
-	playButton->SetPosition((game->GetSettings()->screenWidth / 2) - (playSprite->GetScaleWidth() / 2),
-		350);
+	playButton->SetPosition((game->GetSettings()->screenWidth / 2) - (playSprite->GetScaleWidth() / 2), game->GetSettings()->screenHeight * 11 / 36);
 	buttons.push_back(playButton);
 
 	Button* exitButton = new Button(exitSprite, "exit");
-	exitButton->SetPosition((game->GetSettings()->screenWidth / 2) - (exitSprite->GetScaleWidth() / 2),
-		150);
+	exitButton->SetPosition((game->GetSettings()->screenWidth / 2) - (exitSprite->GetScaleWidth() / 2), playButton->GetPosition().y - exitSprite->GetScaleHeight() * 1.5);
 	buttons.push_back(exitButton);
 
 	// Set play button into active button
@@ -43,7 +39,7 @@ void Engine::MainMenuScreen::Init()
 
 	// Create Title
 	title = new Sprite(titleTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
-	title->SetNumXFrames(1)->SetNumYFrames(1)->SetScale(0.8);
+	title->SetNumXFrames(1)->SetNumYFrames(1)->SetScale(game->GetSettings()->screenWidth * 0.0004296875);
 	title->SetPosition((game->GetSettings()->screenWidth - title->GetScaleWidth()) / 2.0f,(game->GetSettings()->screenHeight - title->GetScaleHeight()) / 0.8f);
 
 	// Add input mappings
@@ -52,7 +48,6 @@ void Engine::MainMenuScreen::Init()
 		->AddInputMapping("press", SDLK_RETURN);
 
 }
-
 
 void Engine::MainMenuScreen::Update()
 {
@@ -83,7 +78,7 @@ void Engine::MainMenuScreen::Update()
 		b->SetButtonState(Engine::ButtonState::PRESS);
 		// If play button then go to InGame, exit button then exit
 		if ("play" == b->GetButtonName()) {
-			ScreenManager::GetInstance(game)->SetCurrentScreen("fooddrop");
+			ScreenManager::GetInstance(game)->SetCurrentScreen("gameplay");
 		}
 		else if ("exit" == b->GetButtonName()) {
 			game->SetState(Engine::State::EXIT);

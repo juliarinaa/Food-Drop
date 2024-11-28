@@ -16,7 +16,7 @@
 #include "LessonAI01_SteeringBehaviors.h"
 #include "LessonAI02_NPCWave.h"
 
-#include "CookNCollect.h"
+#include "GamePlayScreen.h"
 #include "FoodDropGame.h"
 
 int main(int argc, char** argv) {

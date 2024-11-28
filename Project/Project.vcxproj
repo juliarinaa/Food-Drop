@@ -149,7 +149,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="BaseCharacter.h" />
-    <ClInclude Include="CookNCollect.h" />
+    <ClInclude Include="GamePlayScreen.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FoodDropGame.h" />
     <ClInclude Include="Heart.h" />
@@ -192,7 +192,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="BaseCharacter.cpp" />
-    <ClCompile Include="CookNCollect.cpp" />
+    <ClCompile Include="GamePlayScreen.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FoodDropGame.cpp" />
     <ClCompile Include="Heart.cpp" />

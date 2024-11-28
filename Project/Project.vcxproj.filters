@@ -134,7 +134,7 @@
     <ClInclude Include="Lesson11_ParallaxScrolling.h">
       <Filter>Demo Files</Filter>
     </ClInclude>
-    <ClInclude Include="CookNCollect.h">
+    <ClInclude Include="GamePlayScreen.h">
       <Filter>Demo Files</Filter>
     </ClInclude>
     <ClInclude Include="Food.h">
@@ -265,7 +265,7 @@
     <ClCompile Include="Lesson11_ParallaxScrolling.cpp">
       <Filter>Demo Files</Filter>
     </ClCompile>
-    <ClCompile Include="CookNCollect.cpp">
+    <ClCompile Include="GamePlayScreen.cpp">
       <Filter>Demo Files</Filter>
     </ClCompile>
     <ClCompile Include="Food.cpp">
