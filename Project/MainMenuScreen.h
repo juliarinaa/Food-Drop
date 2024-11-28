@@ -23,6 +23,7 @@ namespace Engine {
 	private:
 		Sprite* background = NULL;
 		Sprite* title = NULL;
+		Sprite* buttonBackground = NULL;
 		vector<Button*> buttons;
 		Text* text;
 		int currentButtonIndex = 0;

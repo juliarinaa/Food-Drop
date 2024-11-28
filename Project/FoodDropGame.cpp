@@ -17,7 +17,7 @@ void Engine::FoodDropGame::Init()
 {
 	Engine::ScreenManager::GetInstance(this)->AddScreen("gameplay", new GamePlayScreen())
 		->AddScreen("mainmenu", new MainMenuScreen())->AddScreen("restartmenu", new RestartMenuScreen())
-		->AddScreen("restartmenu", new RestartMenuScreen())->SetCurrentScreen("mainmenu");
+		->SetCurrentScreen("mainmenu");
 
 }
 

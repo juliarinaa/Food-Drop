@@ -1,5 +1,5 @@
 #include "RestartMenuScreen.h"
-#include "GamePlayScreen.h"
+#include "MainMenuScreen.h"
 
 Engine::RestartMenuScreen::RestartMenuScreen()
 {
@@ -16,16 +16,16 @@ void Engine::RestartMenuScreen::Init()
     Texture* texture = new Texture("buttons.png");
     Texture* restartTexture = new Texture("restart.png");
 
-    Texture* bgTexture = new Texture("background.png");
+    Texture* bgTexture = new Texture("background_restaurant.png");
+    Texture* buttonTexture = new Texture("button_background_mainmenu.png");
 
     bgSprite = new Sprite(bgTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
     bgSprite->SetSize(game->GetSettings()->screenWidth, game->GetSettings()->screenHeight);
 
     // Create Restart Button
     Sprite* restartSprite = (new Sprite(restartTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
-        ->SetNumXFrames(1)->SetNumYFrames(1)->AddAnimation("normal", 1, 1)
-        ->AddAnimation("hover", 1, 1)->AddAnimation("press", 1, 1)->SetAnimationDuration(400);
-    restartSprite->SetSize(120, 120);
+        ->SetNumXFrames(3)->SetScale(3)->SetNumYFrames(1)->AddAnimation("normal", 0, 0)->AddAnimation("hover", 0, 2)
+        ->AddAnimation("press", 0, 2)->SetAnimationDuration(400);
     Button* restartButton = new Button(restartSprite, "restart");
     restartButton->SetPosition((game->GetSettings()->screenWidth / 2) - (restartSprite->GetScaleWidth() / 2), 500);
     buttons.push_back(restartButton);
@@ -46,7 +46,7 @@ void Engine::RestartMenuScreen::Init()
     text = (new Text("8-bit Arcade In.ttf", 200, game->GetDefaultTextShader()))
         ->SetText("Game Over")->SetPosition(game->GetSettings()->screenWidth * 0.5f - 400, game->GetSettings()->screenHeight - 200.0f)->SetColor(213, 168, 134);
 
-    textGameOver = (new Text("lucon.ttf", 30, game->GetDefaultTextShader()))
+    textGameOver = (new Text("Greenscr.ttf", 30, game->GetDefaultTextShader()))
         ->SetText("Final Score: 0")  // Set teks awal
         ->SetPosition(game->GetSettings()->screenWidth * 0.5f - 200, game->GetSettings()->screenHeight - 150)
         ->SetColor(213, 168, 134);
@@ -78,13 +78,13 @@ void Engine::RestartMenuScreen::Update()
         b->SetButtonState(Engine::ButtonState::PRESS);
 
         if (b->GetButtonName() == "restart") {
-            ScreenManager::GetInstance(game)->SetCurrentScreen("fooddrop"); // Kembali ke ingame
+            ScreenManager::GetInstance(game)->SetCurrentScreen("mainmenu"); // Kembali ke ingame
 
-            // Panggil metode RestartGame() pada instance dari DinoGameScreen
-            GamePlayScreen* gameScreen = dynamic_cast<GamePlayScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen());
-            if (gameScreen) {
+            // Panggil metode RestartGame() pada instance dari GameScreen
+            MainMenuScreen* gameScreen = dynamic_cast<MainMenuScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen());
+            /*if (gameScreen) {
                 gameScreen->ResetGameState();
-            }
+            }*/
         }
         else if (b->GetButtonName() == "exit") {
             game->SetState(Engine::State::EXIT);

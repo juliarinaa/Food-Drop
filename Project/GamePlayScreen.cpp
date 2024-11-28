@@ -242,7 +242,7 @@ void Engine::GamePlayScreen::Update()
 							gameOver = true;
 							// Mengganti ke layar restart menu saat game over
 							ScreenManager::GetInstance(game)->SetCurrentScreen("restartmenu");
-							// Kirim skor ke layar DinoRestartMenuScreen
+							// Kirim skor ke layar RestartMenuScreen
 							RestartMenuScreen* restartMenu = dynamic_cast<RestartMenuScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen());
 							if (restartMenu) {
 								restartMenu->SetFinalScore(score);  // Set skor akhir sebelum berpindah layar
@@ -432,6 +432,15 @@ void Engine::GamePlayScreen::ResetGameState() {
 	// Reset skor
 	score = 0;
 	bonusScore = 0;
+
+
+	int hearts = 3;
+	// Reset hearts
+
+
+	// Reset basket position
+	basketSprite->SetPosition(game->GetSettings()->screenWidth / 2 - basketSprite->GetScaleWidth() / 2, 0);
+
 	// Reset game over flag
 	gameOver = false;
 
