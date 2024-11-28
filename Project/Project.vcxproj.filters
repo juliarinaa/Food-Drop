@@ -149,6 +149,12 @@
     <ClInclude Include="Sprite.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="FoodDropGame.h">
+      <Filter>Demo Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RestartMenuScreen.h">
+      <Filter>Demo Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Shader.cpp">
@@ -270,6 +276,12 @@
     </ClCompile>
     <ClCompile Include="Request.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FoodDropGame.cpp">
+      <Filter>Demo Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RestartMenuScreen.cpp">
+      <Filter>Demo Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

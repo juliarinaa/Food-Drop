@@ -151,6 +151,7 @@
     <ClInclude Include="BaseCharacter.h" />
     <ClInclude Include="CookNCollect.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="FoodDropGame.h" />
     <ClInclude Include="Heart.h" />
     <ClInclude Include="Food.h" />
     <ClInclude Include="Lesson11_ParallaxScrolling.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Quad.h" />
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="Request.h" />
+    <ClInclude Include="RestartMenuScreen.h" />
     <ClInclude Include="SATCollision.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ScreenManager.h" />
@@ -192,6 +194,7 @@
     <ClCompile Include="BaseCharacter.cpp" />
     <ClCompile Include="CookNCollect.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="FoodDropGame.cpp" />
     <ClCompile Include="Heart.cpp" />
     <ClCompile Include="Food.cpp" />
     <ClCompile Include="Lesson11_ParallaxScrolling.cpp" />
@@ -217,6 +220,7 @@
     <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="Request.cpp" />
+    <ClCompile Include="RestartMenuScreen.cpp" />
     <ClCompile Include="SATCollision.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ScreenManager.cpp" />

@@ -1,5 +1,5 @@
-#ifndef MAINMENUSCREEN_H
-#define MAINMENUSCREEN_H
+#ifndef RESTARTMENUSCREEN_H
+#define RESTARTMENUSCREEN_H
 
 #include "Screen.h"
 #include "Game.h"
@@ -12,20 +12,23 @@
 #include "ScreenManager.h"
 
 namespace Engine {
-	class MainMenuScreen :
+	class RestartMenuScreen :
 		public Engine::Screen
 	{
 	public:
-		MainMenuScreen();
+		RestartMenuScreen();
 		void Init();
 		void Update();
 		void Draw();
+		void SetFinalScore(int finalScore);
 	private:
-		Sprite* background = NULL;
-		Sprite* title = NULL;
 		vector<Button*> buttons;
 		Text* text;
+		Text* textGameOver;
 		int currentButtonIndex = 0;
+		Sprite* bgSprite;
+		int finalScore;
+
 	};
 }
 

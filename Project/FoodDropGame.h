@@ -1,5 +1,5 @@
-#ifndef COOKNCOLLECT_H
-#define COOKNCOLLECT_H
+#ifndef FOODDROPGAME_H
+#define FOODDROPGAME_H
 
 #include "Game.h"
 #include "Setting.h"
@@ -16,15 +16,15 @@
 #include <iomanip>
 
 namespace Engine {
-	class CookNCollect :public Engine::Game
+	class FoodDropGame :public Engine::Game
 	{
 	public:
-		CookNCollect(Setting* setting);
-		~CookNCollect();
+		FoodDropGame(Setting* setting);
+		~FoodDropGame();
 		virtual void Init();
 		virtual void Update();
 		virtual void Render();
-		virtual void ResetGameState();
+		void ResetGameState();
 	private:
 		Engine::Texture* texture = NULL;
 		Engine::Sprite* CreateSprite();
@@ -71,7 +71,7 @@ namespace Engine {
 		int score = 0, bonusScore = 0;
 		float bonusScoreDuration = 1000;
 		bool showBonusScore = false;
-		
+
 		bool gameOver = false;
 		bool moveUp = true;
 		bool allRequestFullfilled = false;
@@ -84,7 +84,7 @@ namespace Engine {
 
 		//debugging dot
 		Engine::Texture* dotTexture = NULL;
-		
+
 		Engine::Sprite* dot = NULL;
 
 		//Sprite* dotSprite1 = NULL;

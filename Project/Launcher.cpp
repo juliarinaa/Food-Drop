@@ -17,6 +17,7 @@
 #include "LessonAI02_NPCWave.h"
 
 #include "CookNCollect.h"
+#include "FoodDropGame.h"
 
 int main(int argc, char** argv) {
 	Engine::Setting* setting = new Engine::Setting();
@@ -25,7 +26,7 @@ int main(int argc, char** argv) {
 	setting->windowFlag = Engine::WindowFlag::FULLSCREEN;
 	setting->vsync = false;
 	setting->targetFrameRate = 75;
-	Engine::Game* game = new Engine::CookNCollect(setting);
+	Engine::Game* game = new Engine::FoodDropGame(setting);
 	game->Run();
 	delete setting;
 	delete game;

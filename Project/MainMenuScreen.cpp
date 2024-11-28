@@ -4,6 +4,7 @@ Engine::MainMenuScreen::MainMenuScreen()
 {
 	text = NULL;
 	background = NULL;
+	title = NULL;
 }
 
 void Engine::MainMenuScreen::Init()
@@ -11,37 +12,39 @@ void Engine::MainMenuScreen::Init()
 	// Create a Texture
 	Texture* texture = new Texture("buttons.png");
 	Texture* bgTexture = new Texture("cafe.png");
+	Texture* titleTexture = new Texture("title.png");
 
 	// Create Sprites
 	background = (new Sprite(bgTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))->SetPosition(0, 0);
 	background->SetSize(game->GetSettings()->screenWidth, background->GetScaleHeight() / background->GetScaleWidth() * game->GetSettings()->screenWidth - 60);
 
 	Sprite* playSprite = (new Sprite(texture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
-		->SetNumXFrames(6)->SetNumYFrames(1)->AddAnimation("normal", 5, 5)->AddAnimation("hover", 3, 4)
-		->AddAnimation("press", 3, 4)->SetAnimationDuration(400);
+		->SetNumXFrames(6)->SetScale(3)->SetNumYFrames(1)->AddAnimation("normal", 0, 0)->AddAnimation("hover", 0, 2)
+		->AddAnimation("press", 0, 2)->SetAnimationDuration(400);
 
 	Sprite* exitSprite = (new Sprite(texture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
-		->SetNumXFrames(6)->SetNumYFrames(1)->AddAnimation("normal", 2, 2)->AddAnimation("hover", 0, 1)
-		->AddAnimation("press", 0, 1)->SetAnimationDuration(400);
+		->SetNumXFrames(6)->SetScale(3)->SetNumYFrames(1)->AddAnimation("normal", 3, 3)->AddAnimation("hover", 3, 5)
+		->AddAnimation("press", 3, 5)->SetAnimationDuration(400);
 
 	//Create Buttons
 	Button* playButton = new Button(playSprite, "play");
 	playButton->SetPosition((game->GetSettings()->screenWidth / 2) - (playSprite->GetScaleWidth() / 2),
-		400);
+		350);
 	buttons.push_back(playButton);
 
 	Button* exitButton = new Button(exitSprite, "exit");
 	exitButton->SetPosition((game->GetSettings()->screenWidth / 2) - (exitSprite->GetScaleWidth() / 2),
-		250);
+		150);
 	buttons.push_back(exitButton);
 
 	// Set play button into active button
 	currentButtonIndex = 0;
 	buttons[currentButtonIndex]->SetButtonState(Engine::ButtonState::HOVER);
 
-	// Create Text
-	text = (new Text("8-bit Arcade In.ttf", 100, game->GetDefaultTextShader()))
-		->SetText("The Spawning Turtle")->SetPosition(game->GetSettings()->screenWidth * 0.5f - 500, game->GetSettings()->screenHeight - 100.0f)->SetColor(0, 0, 0);
+	// Create Title
+	title = new Sprite(titleTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
+	title->SetNumXFrames(1)->SetNumYFrames(1)->SetScale(0.8);
+	title->SetPosition((game->GetSettings()->screenWidth - title->GetScaleWidth()) / 2.0f,(game->GetSettings()->screenHeight - title->GetScaleHeight()) / 0.8f);
 
 	// Add input mappings
 	game->GetInputManager()->AddInputMapping("next", SDLK_DOWN)
@@ -80,7 +83,7 @@ void Engine::MainMenuScreen::Update()
 		b->SetButtonState(Engine::ButtonState::PRESS);
 		// If play button then go to InGame, exit button then exit
 		if ("play" == b->GetButtonName()) {
-			ScreenManager::GetInstance(game)->SetCurrentScreen("ingame");
+			ScreenManager::GetInstance(game)->SetCurrentScreen("fooddrop");
 		}
 		else if ("exit" == b->GetButtonName()) {
 			game->SetState(Engine::State::EXIT);
@@ -97,11 +100,11 @@ void Engine::MainMenuScreen::Update()
 void Engine::MainMenuScreen::Draw()
 {
 	background->Draw();
+	title->Draw();
+
 	// Render all buttons
 	for (Button* b : buttons) {
 		b->Draw();
 	}
-	// Render title 
-	text->Draw();
 
 }

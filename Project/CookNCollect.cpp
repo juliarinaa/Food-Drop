@@ -1,8 +1,9 @@
 #include "CookNCollect.h"
+#include "RestartMenuScreen.h"
 
 Engine::CookNCollect::CookNCollect(Setting* setting) :Engine::Game(setting)
 {
-	setting->windowTitle = "Object Pool";
+	//setting->windowTitle = "Object Pool";
 }
 
 Engine::CookNCollect::~CookNCollect()
@@ -416,4 +417,25 @@ string  Engine::CookNCollect::FormatScore(int score) {
 	ostringstream oss;
 	oss << std::setfill('0') << std::setw(7) << score;
 	return oss.str();
+}
+
+void Engine::CookNCollect::ResetGameState() {
+	// Reset skor
+	score = 0;
+
+	// Reset game over flag
+	gameOver = false;
+
+	// Reset request dan makanan
+	request.clear();
+	unfulfilledRequest.clear();
+
+	// Menghapus objek makanan yang ada
+	for (Food* o : objects) {
+		o->SetDie(); // Menghapus makanan yang ada
+	}
+	objects.clear();
+
+	// Spawn makanan baru
+	currFood = SpawnObjects();
 }
