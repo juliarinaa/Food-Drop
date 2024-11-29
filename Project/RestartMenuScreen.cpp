@@ -1,5 +1,4 @@
 #include "RestartMenuScreen.h"
-#include "MainMenuScreen.h"
 
 Engine::RestartMenuScreen::RestartMenuScreen()
 {
@@ -7,13 +6,12 @@ Engine::RestartMenuScreen::RestartMenuScreen()
     bgSprite = NULL;
     textGameOver = NULL;
     finalScore = 0;
-
 }
 
 void Engine::RestartMenuScreen::Init()
 {
     // Create background texture and sprite
-    Texture* texture = new Texture("buttons.png");
+    Texture* mainMenuTexture = new Texture("mainmenubutton.png");
     Texture* restartTexture = new Texture("restart.png");
 
     Texture* bgTexture = new Texture("background_restaurant.png");
@@ -24,19 +22,19 @@ void Engine::RestartMenuScreen::Init()
 
     // Create Restart Button
     Sprite* restartSprite = (new Sprite(restartTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
-        ->SetNumXFrames(3)->SetScale(3)->SetNumYFrames(1)->AddAnimation("normal", 0, 0)->AddAnimation("hover", 0, 2)
+        ->SetNumXFrames(3)->SetScale(game->GetSettings()->screenWidth * 0.001953125)->SetNumYFrames(1)->AddAnimation("normal", 0, 0)->AddAnimation("hover", 0, 2)
         ->AddAnimation("press", 0, 2)->SetAnimationDuration(400);
     Button* restartButton = new Button(restartSprite, "restart");
-    restartButton->SetPosition((game->GetSettings()->screenWidth / 2) - (restartSprite->GetScaleWidth() / 2), 500);
+    restartButton->SetPosition((game->GetSettings()->screenWidth / 2) - (restartSprite->GetScaleWidth() / 2), game->GetSettings()->screenHeight * 11 / 36);
     buttons.push_back(restartButton);
 
     // Create Exit Button
-    Sprite* exitSprite = (new Sprite(texture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
-        ->SetNumXFrames(6)->SetScale(3)->SetNumYFrames(1)->AddAnimation("normal", 3, 3)->AddAnimation("hover", 3, 5)
-        ->AddAnimation("press", 3, 5)->SetAnimationDuration(400);
-    Button* exitButton = new Button(exitSprite, "exit");
-    exitButton->SetPosition((game->GetSettings()->screenWidth / 2) - (exitSprite->GetScaleWidth() / 2), 350);
-    buttons.push_back(exitButton);
+    Sprite* mainMenuSprite = (new Sprite(mainMenuTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
+        ->SetNumXFrames(3)->SetScale(game->GetSettings()->screenWidth * 0.001953125)->SetNumYFrames(1)->AddAnimation("normal", 0, 0)->AddAnimation("hover", 0, 2)
+        ->AddAnimation("press", 0, 2)->SetAnimationDuration(400);
+    Button* mainMenuButton = new Button(mainMenuSprite, "mainmenu");
+    mainMenuButton->SetPosition((game->GetSettings()->screenWidth / 2) - (mainMenuSprite->GetScaleWidth() / 2), restartButton->GetPosition().y - mainMenuSprite->GetScaleHeight() * 1.5);
+    buttons.push_back(mainMenuButton);
 
     // Set active button
     currentButtonIndex = 0;
@@ -46,10 +44,10 @@ void Engine::RestartMenuScreen::Init()
     text = (new Text("8-bit Arcade In.ttf", 200, game->GetDefaultTextShader()))
         ->SetText("Game Over")->SetPosition(game->GetSettings()->screenWidth * 0.5f - 400, game->GetSettings()->screenHeight - 200.0f)->SetColor(213, 168, 134);
 
-    textGameOver = (new Text("Greenscr.ttf", 30, game->GetDefaultTextShader()))
+    textGameOver = (new Text("greenscr.ttf", 30, game->GetDefaultTextShader()))
         ->SetText("Final Score: 0")  // Set teks awal
         ->SetPosition(game->GetSettings()->screenWidth * 0.5f - 200, game->GetSettings()->screenHeight - 150)
-        ->SetColor(213, 168, 134);
+        ->SetColor(255, 255, 255);
 
     // Add input mappings
     game->GetInputManager()->AddInputMapping("next", SDLK_RIGHT)
@@ -78,16 +76,18 @@ void Engine::RestartMenuScreen::Update()
         b->SetButtonState(Engine::ButtonState::PRESS);
 
         if (b->GetButtonName() == "restart") {
-            ScreenManager::GetInstance(game)->SetCurrentScreen("mainmenu"); // Kembali ke ingame
+            ScreenManager::GetInstance(game)->SetCurrentScreen("gameplay"); // Kembali ke ingame
 
             // Panggil metode RestartGame() pada instance dari GameScreen
-            MainMenuScreen* gameScreen = dynamic_cast<MainMenuScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen());
-            /*if (gameScreen) {
+            //MainMenuScreen* gameScreen = dynamic_cast<MainMenuScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen());
+            GamePlayScreen* gameScreen = dynamic_cast<GamePlayScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen());
+            if (gameScreen) {
                 gameScreen->ResetGameState();
-            }*/
+            }
         }
-        else if (b->GetButtonName() == "exit") {
-            game->SetState(Engine::State::EXIT);
+        else if (b->GetButtonName() == "mainmenu") {
+            ScreenManager::GetInstance(game)->SetCurrentScreen("mainmenu"); // Kembali ke mainmenu
+            MainMenuScreen* mainMenuScreen = dynamic_cast<MainMenuScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen()); 
         }
     }
 

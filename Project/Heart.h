@@ -18,6 +18,7 @@ namespace Engine {
 		Heart* SetPosition(float x, float y);
 		Heart* PlayAnim(string name);
 		Heart* SetDie();
+		Heart* SetExist();
 		float GetWidth();
 		float GetHeight();
 		bool IsDie();

@@ -5,7 +5,7 @@ Engine::MainMenuScreen::MainMenuScreen()
 	text = NULL;
 	background = NULL;
 	title = NULL;
-	buttonBackground = NULL;
+	//buttonBackground = NULL;
 }
 
 void Engine::MainMenuScreen::Init()
@@ -14,7 +14,7 @@ void Engine::MainMenuScreen::Init()
 	Texture* texture = new Texture("buttons.png");
 	Texture* bgTexture = new Texture("background_restaurant.png");
 	Texture* titleTexture = new Texture("title.png");
-	Texture* buttonTexture = new Texture("button_background_mainmenu.png");
+	//Texture* buttonTexture = new Texture("button_background_mainmenu.png");
 
 	background = (new Sprite(bgTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))->SetSize((float)game->GetSettings()->screenWidth, (float)game->GetSettings()->screenHeight);
 	
@@ -41,13 +41,13 @@ void Engine::MainMenuScreen::Init()
 
 	// Create Title
 	title = new Sprite(titleTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
-	title->SetNumXFrames(1)->SetNumYFrames(1)->SetScale(game->GetSettings()->screenWidth * 0.0004296875);
+	title->SetNumXFrames(1)->SetNumYFrames(1)->SetScale(game->GetSettings()->screenHeight * 0.00076388888);
 	title->SetPosition((game->GetSettings()->screenWidth - title->GetScaleWidth()) / 2.0f,(game->GetSettings()->screenHeight - title->GetScaleHeight()) / 0.8f);
 
 	// Create button background
-	buttonBackground = new Sprite(buttonTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
-	buttonBackground->SetNumXFrames(1)->SetNumYFrames(1)->SetScale(game->GetSettings()->screenWidth * 0.0015);
-	buttonBackground->SetPosition((game->GetSettings()->screenWidth - buttonBackground->GetScaleWidth()) / 2.0f, (game->GetSettings()->screenHeight - buttonBackground->GetScaleHeight()) / 10.0f);
+	//buttonBackground = new Sprite(buttonTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
+	//buttonBackground->SetNumXFrames(1)->SetNumYFrames(1)->SetScale(game->GetSettings()->screenWidth * 0.0015);
+	//buttonBackground->SetPosition((game->GetSettings()->screenWidth - buttonBackground->GetScaleWidth()) / 2.0f, (game->GetSettings()->screenHeight - buttonBackground->GetScaleHeight()) / 10.0f);
 
 	// Add input mappings
 	game->GetInputManager()->AddInputMapping("next", SDLK_DOWN)
@@ -86,6 +86,13 @@ void Engine::MainMenuScreen::Update()
 		// If play button then go to InGame, exit button then exit
 		if ("play" == b->GetButtonName()) {
 			ScreenManager::GetInstance(game)->SetCurrentScreen("gameplay");
+			if(!firstTime){
+				GamePlayScreen* gameScreen = dynamic_cast<GamePlayScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen());
+				if (gameScreen) {
+					gameScreen->ResetGameState();
+				}
+			}
+			firstTime = false;
 		}
 		else if ("exit" == b->GetButtonName()) {
 			game->SetState(Engine::State::EXIT);
@@ -103,7 +110,7 @@ void Engine::MainMenuScreen::Draw()
 {
 	background->Draw();
 	title->Draw();
-	buttonBackground->Draw();
+	//buttonBackground->Draw();
 
 	// Render all buttons
 	for (Button* b : buttons) {

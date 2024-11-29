@@ -48,6 +48,13 @@ Engine::Heart* Engine::Heart::SetDie()
 	return this;
 }
 
+Engine::Heart* Engine::Heart::SetExist()
+{
+	this->state = Engine::HeartState::EXIST;
+	sprite->SetFrame(0);
+	return this;
+}
+
 float Engine::Heart::GetX()
 {
 	return sprite->GetPosition().x;

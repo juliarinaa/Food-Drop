@@ -8,6 +8,7 @@
 #include "Sprite.h"
 #include "Button.h"
 #include "Text.h"
+#include "GamePlayScreen.h"
 #include <vector>
 #include "ScreenManager.h"
 
@@ -23,10 +24,11 @@ namespace Engine {
 	private:
 		Sprite* background = NULL;
 		Sprite* title = NULL;
-		Sprite* buttonBackground = NULL;
+		//Sprite* buttonBackground = NULL;
 		vector<Button*> buttons;
 		Text* text;
 		int currentButtonIndex = 0;
+		bool firstTime = true;
 	};
 }
 

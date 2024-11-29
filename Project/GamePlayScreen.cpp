@@ -34,6 +34,7 @@ void Engine::GamePlayScreen::Init()
 	wrongSound = (new Sound("wrong.wav"))->SetVolume(100);
 	completeSound = (new Sound("bonus point.wav"))->SetVolume(100);
 	changeNoteSound = (new Sound("flipping2.wav"))->SetVolume(100);
+	gameOverSound = (new Sound("gameover.wav"))->SetVolume(100);
 	music = (new Music("00 lolurio - Everyday Life.ogg"))->SetVolume(70)->Play(true);
 
 	// Basket
@@ -148,7 +149,7 @@ void Engine::GamePlayScreen::Init()
 	scoreBoardSprite->SetPosition(game->GetSettings()->screenWidth * 41 / 60 + (game->GetSettings()->screenWidth * 19 / 60 - scoreBoardSprite->GetScaleWidth()) / 2, game->GetSettings()->screenHeight * 0.7 - scoreBoardSprite->GetScaleHeight());
 
 	// Score title setting
-	scoreTitle = new Text("ARCADECLASSIC.ttf", game->GetSettings()->screenWidth * 0.0234375, game->GetDefaultTextShader());
+	scoreTitle = new Text("ARCADECLASSIC.ttf", static_cast<int>(round(game->GetSettings()->screenWidth * 0.0234375)), game->GetDefaultTextShader());
 	scoreTitle->SetText("SCORE");  // Menampilkan teks "SCORE"
 	scoreTitle->SetColor(0, 0, 0)->SetPosition(scoreBoardSprite->GetPosition().x + (scoreBoardSprite->GetScaleWidth() - scoreTitle->GetWidth()) / 2, scoreBoardSprite->GetPosition().y + scoreBoardSprite->GetScaleHeight() * 0.55);
 
@@ -158,7 +159,7 @@ void Engine::GamePlayScreen::Init()
 	scoreText->SetColor(0, 0, 0)->SetPosition(scoreBoardSprite->GetPosition().x + (scoreBoardSprite->GetScaleWidth() - scoreText->GetWidth()) / 2, scoreTitle->GetPosition().y - scoreText->GetHeight() - game->GetSettings()->screenHeight * 0.03);
 
 	// Bonus Score text setting
-	bonusScoreText = new Text("ARCADECLASSIC.ttf", game->GetSettings()->screenWidth * 0.0234375, game->GetDefaultTextShader());
+	bonusScoreText = new Text("ARCADECLASSIC.ttf", static_cast<int>(round(game->GetSettings()->screenWidth * 0.0234375)), game->GetDefaultTextShader());
 	bonusScoreText->SetColor(106, 193, 97)->SetPosition(scoreBoardSprite->GetPosition().x + (scoreBoardSprite->GetScaleWidth() - bonusScoreText->GetWidth()) / 2, scoreText->GetPosition().y - bonusScoreText->GetHeight() - game->GetSettings()->screenHeight * 0.025);
 	
 	currFood = SpawnObjects();
@@ -239,6 +240,8 @@ void Engine::GamePlayScreen::Update()
 							break;
 						}
 						if (hearts[0]->IsDie()) {
+							music->Stop();
+							gameOverSound->Play(false);
 							gameOver = true;
 							// Mengganti ke layar restart menu saat game over
 							ScreenManager::GetInstance(game)->SetCurrentScreen("restartmenu");
@@ -429,20 +432,9 @@ string  Engine::GamePlayScreen::FormatScore(int score) {
 }
 
 void Engine::GamePlayScreen::ResetGameState() {
-	// Reset skor
-	score = 0;
-	bonusScore = 0;
-
-
-	int hearts = 3;
-	// Reset hearts
-
-
+	music->Play(true);
 	// Reset basket position
 	basketSprite->SetPosition(game->GetSettings()->screenWidth / 2 - basketSprite->GetScaleWidth() / 2, 0);
-
-	// Reset game over flag
-	gameOver = false;
 
 	// Reset request dan makanan
 	request.clear();
@@ -452,8 +444,40 @@ void Engine::GamePlayScreen::ResetGameState() {
 	for (Food* o : objects) {
 		o->SetDie(); // Menghapus makanan yang ada
 	}
-	objects.clear();
+
+	gameOver = false;
+	foodVelocity = 0.2f;
+	allRequestFullfilled = false;
+	moveUp = true;
+	showBonusScore = false;
+	bonusScoreDuration = 1000;
+	score = 0;
+	bonusScore = 0;
+
+	for (Heart* h : hearts) {
+		h->SetExist();
+	}
+
+	foodTypeAmount = (std::rand() % 3) + 1;
+	for (size_t i = 0; i < 3; i++)
+	{
+		if (i < foodTypeAmount) {
+			int foodAmount = (std::rand() % 3) + 1;
+			int frame = rand() % 9;
+			// meriksa apakah makanannya yang dipilih itu udah ada sebelumnya dalam request
+			while (request.count(frame) == 1) {
+				frame = rand() % 9;
+			}
+			unfulfilledRequest.push_back(frame);
+			requestAssets[i]->SetFoodFrame(frame)->SetAmount(foodAmount);
+			request.insert({ frame, foodAmount });
+		}
+		else {
+			requestAssets[i]->SetDie();
+		}
+	}
 
 	// Spawn makanan baru
 	currFood = SpawnObjects();
+	scoreText->SetText("0000000");
 }

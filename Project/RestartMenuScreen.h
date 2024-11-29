@@ -10,6 +10,8 @@
 #include "Text.h"
 #include <vector>
 #include "ScreenManager.h"
+#include "MainMenuScreen.h"
+#include "GamePlayScreen.h"
 
 namespace Engine {
 	class RestartMenuScreen :

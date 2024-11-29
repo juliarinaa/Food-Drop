@@ -83,6 +83,7 @@ namespace Engine {
 		Sound* wrongSound = NULL;
 		Sound* completeSound = NULL;
 		Sound* changeNoteSound = NULL;
+		Sound* gameOverSound = NULL;
 		Music* music = NULL;
 
 		//debugging dot

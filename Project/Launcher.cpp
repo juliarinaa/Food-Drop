@@ -21,9 +21,9 @@
 
 int main(int argc, char** argv) {
 	Engine::Setting* setting = new Engine::Setting();
-	setting->screenWidth = 640;
-	setting->screenHeight = 360;
-	setting->windowFlag = Engine::WindowFlag::FULLSCREEN;
+	setting->screenWidth = 840;
+	setting->screenHeight = 525;
+	setting->windowFlag = Engine::WindowFlag::WINDOWED;
 	setting->vsync = false;
 	setting->targetFrameRate = 75;
 	Engine::Game* game = new Engine::FoodDropGame(setting);
