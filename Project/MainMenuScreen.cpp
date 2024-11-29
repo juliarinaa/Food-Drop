@@ -2,7 +2,7 @@
 
 Engine::MainMenuScreen::MainMenuScreen()
 {
-	text = NULL;
+	textGameOver = NULL;
 	background = NULL;
 	title = NULL;
 	//buttonBackground = NULL;
@@ -10,6 +10,7 @@ Engine::MainMenuScreen::MainMenuScreen()
 
 void Engine::MainMenuScreen::Init()
 {
+	music = (new Music("Wobbly Adventure.ogg"))->SetVolume(60)->Play(true);
 	// Create a Texture
 	Texture* texture = new Texture("buttons.png");
 	Texture* bgTexture = new Texture("background_restaurant.png");
@@ -18,7 +19,7 @@ void Engine::MainMenuScreen::Init()
 
 	background = (new Sprite(bgTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))->SetSize((float)game->GetSettings()->screenWidth, (float)game->GetSettings()->screenHeight);
 	
-	Sprite* playSprite = (new Sprite(texture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
+	playSprite = (new Sprite(texture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
 		->SetNumXFrames(6)->SetScale(game->GetSettings()->screenWidth * 0.001953125)->SetNumYFrames(1)->AddAnimation("normal", 0, 0)->AddAnimation("hover", 0, 2)
 		->AddAnimation("press", 0, 2)->SetAnimationDuration(400);
 
@@ -28,7 +29,7 @@ void Engine::MainMenuScreen::Init()
 
 	//Create Buttons
 	Button* playButton = new Button(playSprite, "play");
-	playButton->SetPosition((game->GetSettings()->screenWidth / 2) - (playSprite->GetScaleWidth() / 2), game->GetSettings()->screenHeight * 11 / 36);
+	playButton->SetPosition((game->GetSettings()->screenWidth / 2) - (playSprite->GetScaleWidth() / 2), game->GetSettings()->screenHeight * 11 / 45);
 	buttons.push_back(playButton);
 
 	Button* exitButton = new Button(exitSprite, "exit");
@@ -49,6 +50,10 @@ void Engine::MainMenuScreen::Init()
 	//buttonBackground->SetNumXFrames(1)->SetNumYFrames(1)->SetScale(game->GetSettings()->screenWidth * 0.0015);
 	//buttonBackground->SetPosition((game->GetSettings()->screenWidth - buttonBackground->GetScaleWidth()) / 2.0f, (game->GetSettings()->screenHeight - buttonBackground->GetScaleHeight()) / 10.0f);
 
+	textGameOver = (new Text("greenscr.ttf", static_cast<int>(round(game->GetSettings()->screenHeight * 0.04166666666)), game->GetDefaultTextShader()))->SetText("Highest Score: 0");  // Set teks awal
+	textGameOver->SetPosition((game->GetSettings()->screenWidth - textGameOver->GetWidth()) / 2, playButton->GetPosition().y + playSprite->GetScaleHeight() + game->GetSettings()->screenHeight * 0.05)
+		->SetColor(255, 255, 255);
+	
 	// Add input mappings
 	game->GetInputManager()->AddInputMapping("next", SDLK_DOWN)
 		->AddInputMapping("prev", SDLK_UP)
@@ -85,14 +90,17 @@ void Engine::MainMenuScreen::Update()
 		b->SetButtonState(Engine::ButtonState::PRESS);
 		// If play button then go to InGame, exit button then exit
 		if ("play" == b->GetButtonName()) {
+			music->Stop();
 			ScreenManager::GetInstance(game)->SetCurrentScreen("gameplay");
+			GamePlayScreen* gameScreen = dynamic_cast<GamePlayScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen());
 			if(!firstTime){
-				GamePlayScreen* gameScreen = dynamic_cast<GamePlayScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen());
 				if (gameScreen) {
 					gameScreen->ResetGameState();
+
 				}
-			}
-			firstTime = false;
+			} else firstTime = false;
+			gameScreen->PlayMusic();
+			
 		}
 		else if ("exit" == b->GetButtonName()) {
 			game->SetState(Engine::State::EXIT);
@@ -116,5 +124,15 @@ void Engine::MainMenuScreen::Draw()
 	for (Button* b : buttons) {
 		b->Draw();
 	}
+	
+	textGameOver->Draw();
+}
 
+void Engine::MainMenuScreen::SetHighestScore(int highestScore) {
+	music->Play(true);
+	std::string HighestScoreText = "Highest Score: " + std::to_string(highestScore);
+	//textGameOver->SetScale(3.0f)->SetText("Game Over! Final Score: " + std::to_string(score))->SetPosition(game->GetSettings()->screenWidth * 0.5f - 500, game->GetSettings()->screenHeight - 500.0f)->SetColor(0, 0, 0);
+
+	textGameOver->SetText(HighestScoreText);
+	textGameOver->SetPosition((game->GetSettings()->screenWidth - textGameOver->GetWidth()) / 2, buttons[0]->GetPosition().y + playSprite->GetScaleHeight() + game->GetSettings()->screenHeight * 0.05);
 }

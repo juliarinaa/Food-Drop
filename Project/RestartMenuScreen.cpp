@@ -23,7 +23,7 @@ void Engine::RestartMenuScreen::Init()
     bgSprite->SetSize(game->GetSettings()->screenWidth, game->GetSettings()->screenHeight);
 
     // Create Restart Button
-    Sprite* restartSprite = (new Sprite(restartTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
+    restartSprite = (new Sprite(restartTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))
         ->SetNumXFrames(3)->SetScale(game->GetSettings()->screenWidth * 0.001953125)->SetNumYFrames(1)->AddAnimation("normal", 0, 0)->AddAnimation("hover", 0, 2)
         ->AddAnimation("press", 0, 2)->SetAnimationDuration(400);
     Button* restartButton = new Button(restartSprite, "restart");
@@ -50,9 +50,8 @@ void Engine::RestartMenuScreen::Init()
     titleGameOver->SetNumXFrames(1)->SetScale(game->GetSettings()->screenHeight * 0.00076388888)->SetNumYFrames(1);
     titleGameOver->SetPosition((game->GetSettings()->screenWidth - titleGameOver->GetScaleWidth()) / 2.0f, (game->GetSettings()->screenHeight - titleGameOver->GetScaleHeight()) / 0.8f);
 
-    textGameOver = (new Text("greenscr.ttf", 30, game->GetDefaultTextShader()))
-        ->SetText("Final Score: 0")  // Set teks awal
-        ->SetPosition(game->GetSettings()->screenWidth * 0.5f - 200, game->GetSettings()->screenHeight - 150)
+    textGameOver = (new Text("greenscr.ttf", static_cast<int>(round(game->GetSettings()->screenHeight * 0.04166666666)), game->GetDefaultTextShader()))->SetText("Final Score: 0");  // Set teks awal
+    textGameOver->SetPosition((game->GetSettings()->screenWidth - textGameOver->GetWidth())/2, restartButton->GetPosition().y + restartSprite->GetScaleHeight() + game->GetSettings()->screenHeight * 0.05)
         ->SetColor(255, 255, 255);
 
     // Add input mappings
@@ -93,7 +92,10 @@ void Engine::RestartMenuScreen::Update()
         }
         else if (b->GetButtonName() == "mainmenu") {
             ScreenManager::GetInstance(game)->SetCurrentScreen("mainmenu"); // Kembali ke mainmenu
-            MainMenuScreen* mainMenuScreen = dynamic_cast<MainMenuScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen()); 
+            MainMenuScreen* mainMenuScreen = dynamic_cast<MainMenuScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen());
+            if (mainMenuScreen) {
+                mainMenuScreen->SetHighestScore(highestScore);
+            }
         }
     }
 
@@ -120,5 +122,10 @@ void Engine::RestartMenuScreen::SetFinalScore(int finalScore) {
     std::string finalScoreText = "Final Score: " + std::to_string(finalScore);
     //textGameOver->SetScale(3.0f)->SetText("Game Over! Final Score: " + std::to_string(score))->SetPosition(game->GetSettings()->screenWidth * 0.5f - 500, game->GetSettings()->screenHeight - 500.0f)->SetColor(0, 0, 0);
 
-    textGameOver->SetText(finalScoreText)->SetPosition(game->GetSettings()->screenWidth * 0.5f - 160, game->GetSettings()->screenHeight - 315.0f)->SetColor(255, 255, 255);
+    textGameOver->SetText(finalScoreText);
+    textGameOver->SetPosition((game->GetSettings()->screenWidth - textGameOver->GetWidth()) / 2, buttons[0]->GetPosition().y + restartSprite->GetScaleHeight() + game->GetSettings()->screenHeight * 0.05);
+}
+
+void Engine::RestartMenuScreen::SetHighestScore(int highestScore) {
+    this->highestScore = highestScore;
 }

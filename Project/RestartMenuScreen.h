@@ -23,14 +23,17 @@ namespace Engine {
 		void Update();
 		void Draw();
 		void SetFinalScore(int finalScore);
+		void SetHighestScore(int highestScore);
 	private:
 		vector<Button*> buttons;
 		Text* text;
 		Text* textGameOver;
 		int currentButtonIndex = 0;
 		Sprite* bgSprite;
+		Sprite* restartSprite;
 		Sprite* titleGameOver;
 		int finalScore = 0;
+		int highestScore = 0;
 
 	};
 }

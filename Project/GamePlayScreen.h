@@ -28,6 +28,7 @@ namespace Engine {
 		void Update();
 		void Draw();
 		void ResetGameState();
+		GamePlayScreen* PlayMusic();
 	private:
 		Engine::Texture* texture = NULL;
 		Engine::Sprite* CreateSprite();
@@ -98,6 +99,7 @@ namespace Engine {
 		Food* currFood = NULL;
 
 		float foodVelocity = 0.2f;
+		int highestScore = 0;
 	};
 }
 #endif

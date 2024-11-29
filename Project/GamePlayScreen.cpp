@@ -35,7 +35,7 @@ void Engine::GamePlayScreen::Init()
 	completeSound = (new Sound("bonus point.wav"))->SetVolume(100);
 	changeNoteSound = (new Sound("flipping2.wav"))->SetVolume(100);
 	gameOverSound = (new Sound("gameover.wav"))->SetVolume(100);
-	music = (new Music("00 lolurio - Everyday Life.ogg"))->SetVolume(70)->Play(true);
+	music = (new Music("00 lolurio - Everyday Life.ogg"))->SetVolume(70);
 
 	// Basket
 	texture = new Texture("basket.png");
@@ -160,7 +160,7 @@ void Engine::GamePlayScreen::Init()
 
 	// Bonus Score text setting
 	bonusScoreText = new Text("ARCADECLASSIC.ttf", static_cast<int>(round(game->GetSettings()->screenWidth * 0.0234375)), game->GetDefaultTextShader());
-	bonusScoreText->SetColor(106, 193, 97)->SetPosition(scoreBoardSprite->GetPosition().x + (scoreBoardSprite->GetScaleWidth() - bonusScoreText->GetWidth()) / 2, scoreText->GetPosition().y - bonusScoreText->GetHeight() - game->GetSettings()->screenHeight * 0.025);
+	bonusScoreText->SetColor(106, 193, 97)->SetPosition(scoreBoardSprite->GetPosition().x + (scoreBoardSprite->GetScaleWidth() - bonusScoreText->GetWidth()) / 2, scoreBoardSprite->GetPosition().y + (scoreText->GetPosition().y - scoreBoardSprite->GetPosition().y - bonusScoreText->GetHeight()) / 2 + scoreBoardSprite->GetScaleHeight() * 0.02);
 	
 	currFood = SpawnObjects();
 }
@@ -242,6 +242,7 @@ void Engine::GamePlayScreen::Update()
 						if (hearts[0]->IsDie()) {
 							music->Stop();
 							gameOverSound->Play(false);
+							if (highestScore < score) highestScore = score;
 							gameOver = true;
 							// Mengganti ke layar restart menu saat game over
 							ScreenManager::GetInstance(game)->SetCurrentScreen("restartmenu");
@@ -249,6 +250,7 @@ void Engine::GamePlayScreen::Update()
 							RestartMenuScreen* restartMenu = dynamic_cast<RestartMenuScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen());
 							if (restartMenu) {
 								restartMenu->SetFinalScore(score);  // Set skor akhir sebelum berpindah layar
+								restartMenu->SetHighestScore(highestScore);
 							}
 							return;
 						}
@@ -394,6 +396,13 @@ Engine::Sprite* Engine::GamePlayScreen::CreateSprite()
 	return (new Sprite(texture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))->SetNumXFrames(3)->SetNumYFrames(3)->SetScale(game->GetSettings()->screenWidth * 0.003125);
 
 }
+
+Engine::GamePlayScreen* Engine::GamePlayScreen::PlayMusic()
+{
+	music->Play(true);
+	return this;
+}
+
 
 Engine::Food* Engine::GamePlayScreen::SpawnObjects()
 {

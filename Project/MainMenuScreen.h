@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "Sprite.h"
 #include "Button.h"
+#include "Music.h"
 #include "Text.h"
 #include "GamePlayScreen.h"
 #include <vector>
@@ -21,13 +22,17 @@ namespace Engine {
 		void Init();
 		void Update();
 		void Draw();
+		void SetHighestScore(int highestScore);
 	private:
 		Sprite* background = NULL;
 		Sprite* title = NULL;
+		Sprite* playSprite = NULL;
+		Music* music = NULL;
 		//Sprite* buttonBackground = NULL;
 		vector<Button*> buttons;
-		Text* text;
+		Text* textGameOver;
 		int currentButtonIndex = 0;
+		int highestScore = 0;
 		bool firstTime = true;
 	};
 }
