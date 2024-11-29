@@ -29,6 +29,7 @@ namespace Engine {
 		Text* textGameOver;
 		int currentButtonIndex = 0;
 		Sprite* bgSprite;
+		Sprite* titleGameOver;
 		int finalScore = 0;
 
 	};

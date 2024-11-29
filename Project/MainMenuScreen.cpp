@@ -13,7 +13,7 @@ void Engine::MainMenuScreen::Init()
 	// Create a Texture
 	Texture* texture = new Texture("buttons.png");
 	Texture* bgTexture = new Texture("background_restaurant.png");
-	Texture* titleTexture = new Texture("title.png");
+	Texture* titleTexture = new Texture("title_mainmenu.png");
 	//Texture* buttonTexture = new Texture("button_background_mainmenu.png");
 
 	background = (new Sprite(bgTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad()))->SetSize((float)game->GetSettings()->screenWidth, (float)game->GetSettings()->screenHeight);
@@ -41,7 +41,7 @@ void Engine::MainMenuScreen::Init()
 
 	// Create Title
 	title = new Sprite(titleTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
-	title->SetNumXFrames(1)->SetNumYFrames(1)->SetScale(game->GetSettings()->screenHeight * 0.00076388888);
+	title->SetNumXFrames(2)->SetScale(game->GetSettings()->screenHeight * 0.00076388888 * 2.0f)->SetNumYFrames(1);
 	title->SetPosition((game->GetSettings()->screenWidth - title->GetScaleWidth()) / 2.0f,(game->GetSettings()->screenHeight - title->GetScaleHeight()) / 0.8f);
 
 	// Create button background
