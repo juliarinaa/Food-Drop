@@ -22,7 +22,8 @@ namespace Engine {
 		void Init();
 		void Update();
 		void Draw();
-		void SetHighestScore(int highestScore);
+		MainMenuScreen* PlayMusic();
+		MainMenuScreen* SetHighestScore(int highestScore);
 	private:
 		Sprite* background = NULL;
 		Sprite* title = NULL;
@@ -30,7 +31,7 @@ namespace Engine {
 		Music* music = NULL;
 		//Sprite* buttonBackground = NULL;
 		vector<Button*> buttons;
-		Text* textGameOver;
+		Text* textHighestScore;
 		int currentButtonIndex = 0;
 		int highestScore = 0;
 		bool firstTime = true;

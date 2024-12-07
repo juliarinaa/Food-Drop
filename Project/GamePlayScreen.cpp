@@ -296,7 +296,7 @@ void Engine::GamePlayScreen::Update()
 					allRequestFullfilled = false;
 					moveUp = true;
 					notesY = game->GetSettings()->screenHeight - notesSprite->GetScaleHeight();
-					foodVelocity += 0.05f;
+					foodVelocity += 0.02f;
 					bonusScore = 0;
 					currFood = SpawnObjects();
 				} 

@@ -2,10 +2,9 @@
 
 Engine::MainMenuScreen::MainMenuScreen()
 {
-	textGameOver = NULL;
+	textHighestScore = NULL;
 	background = NULL;
 	title = NULL;
-	//buttonBackground = NULL;
 }
 
 void Engine::MainMenuScreen::Init()
@@ -45,13 +44,9 @@ void Engine::MainMenuScreen::Init()
 	title->SetNumXFrames(2)->SetScale(game->GetSettings()->screenHeight * 0.00076388888 * 2.0f)->SetNumYFrames(1);
 	title->SetPosition((game->GetSettings()->screenWidth - title->GetScaleWidth()) / 2.0f,(game->GetSettings()->screenHeight - title->GetScaleHeight()) / 0.8f);
 
-	// Create button background
-	//buttonBackground = new Sprite(buttonTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
-	//buttonBackground->SetNumXFrames(1)->SetNumYFrames(1)->SetScale(game->GetSettings()->screenWidth * 0.0015);
-	//buttonBackground->SetPosition((game->GetSettings()->screenWidth - buttonBackground->GetScaleWidth()) / 2.0f, (game->GetSettings()->screenHeight - buttonBackground->GetScaleHeight()) / 10.0f);
-
-	textGameOver = (new Text("greenscr.ttf", static_cast<int>(round(game->GetSettings()->screenHeight * 0.04166666666)), game->GetDefaultTextShader()))->SetText("Highest Score: 0");  // Set teks awal
-	textGameOver->SetPosition((game->GetSettings()->screenWidth - textGameOver->GetWidth()) / 2, playButton->GetPosition().y + playSprite->GetScaleHeight() + game->GetSettings()->screenHeight * 0.05)
+	// Create Highest Score Text
+	textHighestScore = (new Text("greenscr.ttf", static_cast<int>(round(game->GetSettings()->screenHeight * 0.04166666666)), game->GetDefaultTextShader()))->SetText("Highest Score: 0");  // Set teks awal
+	textHighestScore->SetPosition((game->GetSettings()->screenWidth - textHighestScore->GetWidth()) / 2, playButton->GetPosition().y + playSprite->GetScaleHeight() + game->GetSettings()->screenHeight * 0.05)
 		->SetColor(255, 255, 255);
 	
 	// Add input mappings
@@ -125,14 +120,17 @@ void Engine::MainMenuScreen::Draw()
 		b->Draw();
 	}
 	
-	textGameOver->Draw();
+	textHighestScore->Draw();
 }
 
-void Engine::MainMenuScreen::SetHighestScore(int highestScore) {
+Engine::MainMenuScreen* Engine::MainMenuScreen::PlayMusic() {
 	music->Play(true);
-	std::string HighestScoreText = "Highest Score: " + std::to_string(highestScore);
-	//textGameOver->SetScale(3.0f)->SetText("Game Over! Final Score: " + std::to_string(score))->SetPosition(game->GetSettings()->screenWidth * 0.5f - 500, game->GetSettings()->screenHeight - 500.0f)->SetColor(0, 0, 0);
+	return this;
+}
 
-	textGameOver->SetText(HighestScoreText);
-	textGameOver->SetPosition((game->GetSettings()->screenWidth - textGameOver->GetWidth()) / 2, buttons[0]->GetPosition().y + playSprite->GetScaleHeight() + game->GetSettings()->screenHeight * 0.05);
+Engine::MainMenuScreen* Engine::MainMenuScreen::SetHighestScore(int highestScore) {
+	std::string HighestScoreText = "Highest Score: " + std::to_string(highestScore);
+	textHighestScore->SetText(HighestScoreText);
+	textHighestScore->SetPosition((game->GetSettings()->screenWidth - textHighestScore->GetWidth()) / 2, buttons[0]->GetPosition().y + playSprite->GetScaleHeight() + game->GetSettings()->screenHeight * 0.05);
+	return this;
 }

@@ -94,7 +94,7 @@ void Engine::RestartMenuScreen::Update()
             ScreenManager::GetInstance(game)->SetCurrentScreen("mainmenu"); // Kembali ke mainmenu
             MainMenuScreen* mainMenuScreen = dynamic_cast<MainMenuScreen*>(ScreenManager::GetInstance(game)->GetCurrentScreen());
             if (mainMenuScreen) {
-                mainMenuScreen->SetHighestScore(highestScore);
+                mainMenuScreen->SetHighestScore(highestScore)->PlayMusic();
             }
         }
     }
@@ -120,8 +120,6 @@ void Engine::RestartMenuScreen::Draw()
 
 void Engine::RestartMenuScreen::SetFinalScore(int finalScore) {
     std::string finalScoreText = "Final Score: " + std::to_string(finalScore);
-    //textGameOver->SetScale(3.0f)->SetText("Game Over! Final Score: " + std::to_string(score))->SetPosition(game->GetSettings()->screenWidth * 0.5f - 500, game->GetSettings()->screenHeight - 500.0f)->SetColor(0, 0, 0);
-
     textGameOver->SetText(finalScoreText);
     textGameOver->SetPosition((game->GetSettings()->screenWidth - textGameOver->GetWidth()) / 2, buttons[0]->GetPosition().y + restartSprite->GetScaleHeight() + game->GetSettings()->screenHeight * 0.05);
 }
