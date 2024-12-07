@@ -63,7 +63,8 @@ namespace Engine {
 			numObjectPerSpawn = 0,
 			minXBasket = 0,
 			maxXBasket = 0,
-			marginX = 0;
+			marginX = 0,
+			basketVelocity = 0.4f;
 
 		Text* scoreTitle = NULL;
 		Text* scoreText = NULL;

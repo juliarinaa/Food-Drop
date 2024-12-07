@@ -297,6 +297,7 @@ void Engine::GamePlayScreen::Update()
 					moveUp = true;
 					notesY = game->GetSettings()->screenHeight - notesSprite->GetScaleHeight();
 					foodVelocity += 0.02f;
+					basketVelocity += 0.01f;
 					bonusScore = 0;
 					currFood = SpawnObjects();
 				} 
@@ -316,18 +317,17 @@ void Engine::GamePlayScreen::Update()
 		// basket movement -> berdasarkan lesson 05
 		float x = basketSprite->GetPosition().x;
 		float y = basketSprite->GetPosition().y;
-		float velocity = 0.4f;
 		// s = v * t;
 		if (game->GetInputManager()->IsKeyPressed("slide-right")) {
 			if (x <= maxXBasket) {
-				x += velocity * game->GetGameTime();
+				x += basketVelocity * game->GetGameTime();
 				basketSprite->SetPosition(x, y)->Update(game->GetGameTime());
 			}
 		}
 
 		if (game->GetInputManager()->IsKeyPressed("slide-left")) {
 			if (x >= minXBasket) {
-				x -= velocity * game->GetGameTime();
+				x -= basketVelocity * game->GetGameTime();
 				basketSprite->SetPosition(x, y)->Update(game->GetGameTime());
 			}
 		}
@@ -456,6 +456,7 @@ void Engine::GamePlayScreen::ResetGameState() {
 
 	gameOver = false;
 	foodVelocity = 0.2f;
+	basketVelocity = 0.4f;
 	allRequestFullfilled = false;
 	moveUp = true;
 	showBonusScore = false;
