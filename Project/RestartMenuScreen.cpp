@@ -43,9 +43,6 @@ void Engine::RestartMenuScreen::Init()
     buttons[currentButtonIndex]->SetButtonState(Engine::ButtonState::HOVER);
 
     // Create Text
-   // text = (new Text("8-bit Arcade In.ttf", 200, game->GetDefaultTextShader()))
-        //->SetText("Game Over")->SetPosition(game->GetSettings()->screenWidth * 0.5f - 400, game->GetSettings()->screenHeight - 200.0f)->SetColor(213, 168, 134);
-
     titleGameOver = new Sprite(titleGameOverTexture, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
     titleGameOver->SetNumXFrames(1)->SetScale(game->GetSettings()->screenHeight * 0.00076388888)->SetNumYFrames(1);
     titleGameOver->SetPosition((game->GetSettings()->screenWidth - titleGameOver->GetScaleWidth()) / 2.0f, (game->GetSettings()->screenHeight - titleGameOver->GetScaleHeight()) / 0.8f);

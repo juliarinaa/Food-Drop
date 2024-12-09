@@ -159,6 +159,7 @@
     <ClInclude Include="Quad.h" />
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="Request.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RestartMenuScreen.h" />
     <ClInclude Include="SATCollision.h" />
     <ClInclude Include="Screen.h" />
@@ -195,6 +196,15 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon.ico" />
+    <Image Include="icon1.ico" />
+    <Image Include="logo.ico" />
+    <Image Include="logo2.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

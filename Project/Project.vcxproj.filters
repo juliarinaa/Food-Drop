@@ -101,6 +101,9 @@
     <ClInclude Include="RestartMenuScreen.h">
       <Filter>Demo Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Shader.cpp">
@@ -175,5 +178,24 @@
     <ClCompile Include="RestartMenuScreen.cpp">
       <Filter>Demo Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Shader Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>Shader Files</Filter>
+    </Image>
+    <Image Include="logo.ico">
+      <Filter>Shader Files</Filter>
+    </Image>
+    <Image Include="logo2.ico">
+      <Filter>Shader Files</Filter>
+    </Image>
+    <Image Include="icon.ico">
+      <Filter>Shader Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
