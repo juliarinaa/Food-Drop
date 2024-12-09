@@ -148,29 +148,12 @@
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Button.h" />
-    <ClInclude Include="BaseCharacter.h" />
     <ClInclude Include="GamePlayScreen.h" />
-    <ClInclude Include="Enemy.h" />
     <ClInclude Include="FoodDropGame.h" />
     <ClInclude Include="Heart.h" />
     <ClInclude Include="Food.h" />
-    <ClInclude Include="Lesson11_ParallaxScrolling.h" />
-    <ClInclude Include="LessonAI01_SteeringBehaviors.h" />
-    <ClInclude Include="LessonAI02_NPCWave.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Lesson10_Platform.h" />
-    <ClInclude Include="Hero.h" />
-    <ClInclude Include="InGameScreen.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="Lesson01_BgColor.h" />
-    <ClInclude Include="Lesson02_Lerp.h" />
-    <ClInclude Include="Lesson03_Animation.h" />
-    <ClInclude Include="Lesson04_Movement.h" />
-    <ClInclude Include="Lesson05_Input.h" />
-    <ClInclude Include="Lesson06_ObjectPool.h" />
-    <ClInclude Include="Lesson07_GUI.h" />
-    <ClInclude Include="Lesson08_Rotation.h" />
-    <ClInclude Include="Lesson09_Bullet.h" />
     <ClInclude Include="MainMenuScreen.h" />
     <ClInclude Include="Music.h" />
     <ClInclude Include="Quad.h" />
@@ -186,35 +169,17 @@
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="Turtle.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
-    <ClCompile Include="BaseCharacter.cpp" />
     <ClCompile Include="GamePlayScreen.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FoodDropGame.cpp" />
     <ClCompile Include="Heart.cpp" />
     <ClCompile Include="Food.cpp" />
-    <ClCompile Include="Lesson11_ParallaxScrolling.cpp" />
-    <ClCompile Include="LessonAI01_SteeringBehaviors.cpp" />
-    <ClCompile Include="LessonAI02_NPCWave.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Launcher.cpp" />
-    <ClCompile Include="Lesson10_Platform.cpp" />
-    <ClCompile Include="Hero.cpp" />
-    <ClCompile Include="InGameScreen.cpp" />
     <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Lesson01_BgColor.cpp" />
-    <ClCompile Include="Lesson02_Lerp.cpp" />
-    <ClCompile Include="Lesson03_Animation.cpp" />
-    <ClCompile Include="Lesson04_Movement.cpp" />
-    <ClCompile Include="Lesson05_Input.cpp" />
-    <ClCompile Include="Lesson06_ObjectPool.cpp" />
-    <ClCompile Include="Lesson07_GUI.cpp" />
-    <ClCompile Include="Lesson08_Rotation.cpp" />
-    <ClCompile Include="Lesson09_Bullet.cpp" />
     <ClCompile Include="MainMenuScreen.cpp" />
     <ClCompile Include="Music.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
@@ -230,7 +195,6 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Turtle.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
