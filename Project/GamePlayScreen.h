@@ -28,7 +28,9 @@ namespace Engine {
 		void Update();
 		void Draw();
 		void ResetGameState();
+		void SaveHighestScore(int score);
 		GamePlayScreen* PlayMusic();
+		GamePlayScreen* SetHighestScore(int score);
 	private:
 		Engine::Texture* texture = NULL;
 		Engine::Sprite* CreateSprite();

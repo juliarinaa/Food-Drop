@@ -242,7 +242,10 @@ void Engine::GamePlayScreen::Update()
 						if (hearts[0]->IsDie()) {
 							music->Stop();
 							gameOverSound->Play(false);
-							if (highestScore < score) highestScore = score;
+							if (highestScore < score) {
+								highestScore = score;
+								SaveHighestScore(score);
+							}
 							gameOver = true;
 							// Mengganti ke layar restart menu saat game over
 							ScreenManager::GetInstance(game)->SetCurrentScreen("restartmenu");
@@ -490,4 +493,18 @@ void Engine::GamePlayScreen::ResetGameState() {
 	// Spawn makanan baru
 	currFood = SpawnObjects();
 	scoreText->SetText("0000000");
+}
+
+Engine::GamePlayScreen* Engine::GamePlayScreen::SetHighestScore(int score) {
+	highestScore = score;
+	return this;
+}
+
+void Engine::GamePlayScreen::SaveHighestScore(int score) {
+	std::ofstream outFile("hs.dat", std::ios::binary);
+	if (outFile.is_open()) {
+		int encryptedScore = score ^ 0xA5;
+		outFile.write(reinterpret_cast<const char*>(&encryptedScore), sizeof(encryptedScore));
+		outFile.close();
+	}
 }

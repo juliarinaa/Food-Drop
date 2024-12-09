@@ -45,7 +45,8 @@ void Engine::MainMenuScreen::Init()
 	title->SetPosition((game->GetSettings()->screenWidth - title->GetScaleWidth()) / 2.0f,(game->GetSettings()->screenHeight - title->GetScaleHeight()) / 0.8f);
 
 	// Create Highest Score Text
-	textHighestScore = (new Text("greenscr.ttf", static_cast<int>(round(game->GetSettings()->screenHeight * 0.04166666666)), game->GetDefaultTextShader()))->SetText("Highest Score: 0");  // Set teks awal
+	highestScore = LoadHighestScore();
+	textHighestScore = (new Text("greenscr.ttf", static_cast<int>(round(game->GetSettings()->screenHeight * 0.04166666666)), game->GetDefaultTextShader()))->SetText("Highest Score: " + std::to_string(highestScore));  // Set teks awal
 	textHighestScore->SetPosition((game->GetSettings()->screenWidth - textHighestScore->GetWidth()) / 2, playButton->GetPosition().y + playSprite->GetScaleHeight() + game->GetSettings()->screenHeight * 0.05)
 		->SetColor(255, 255, 255);
 	
@@ -53,7 +54,6 @@ void Engine::MainMenuScreen::Init()
 	game->GetInputManager()->AddInputMapping("next", SDLK_DOWN)
 		->AddInputMapping("prev", SDLK_UP)
 		->AddInputMapping("press", SDLK_RETURN);
-
 }
 
 void Engine::MainMenuScreen::Update()
@@ -93,7 +93,11 @@ void Engine::MainMenuScreen::Update()
 					gameScreen->ResetGameState();
 
 				}
-			} else firstTime = false;
+			}
+			else { 
+				gameScreen->SetHighestScore(highestScore);
+				firstTime = false; 
+			}
 			gameScreen->PlayMusic();
 			
 		}
@@ -133,4 +137,16 @@ Engine::MainMenuScreen* Engine::MainMenuScreen::SetHighestScore(int highestScore
 	textHighestScore->SetText(HighestScoreText);
 	textHighestScore->SetPosition((game->GetSettings()->screenWidth - textHighestScore->GetWidth()) / 2, buttons[0]->GetPosition().y + playSprite->GetScaleHeight() + game->GetSettings()->screenHeight * 0.05);
 	return this;
+}
+
+int Engine::MainMenuScreen::LoadHighestScore() {
+	std::ifstream inFile("hs.dat", std::ios::binary);
+	int score = 0;
+	if (inFile.is_open()) {
+		int encryptedScore;
+		inFile.read(reinterpret_cast<char*>(&encryptedScore), sizeof(encryptedScore));
+		score = encryptedScore ^ 0xA5;
+		inFile.close();
+	}
+	return score;
 }

@@ -22,6 +22,7 @@ namespace Engine {
 		void Init();
 		void Update();
 		void Draw();
+		int LoadHighestScore();
 		MainMenuScreen* PlayMusic();
 		MainMenuScreen* SetHighestScore(int highestScore);
 	private:
