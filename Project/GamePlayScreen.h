@@ -53,7 +53,6 @@ namespace Engine {
 		Engine::Texture* basketTexture = NULL;
 		Engine::Sprite* basketSprite = NULL;
 
-		/*void SpawnObjects();*/
 		Food* SpawnObjects();
 
 		vector<Engine::Food*> objects;
@@ -86,19 +85,9 @@ namespace Engine {
 		Sound* correctSound = NULL;
 		Sound* wrongSound = NULL;
 		Sound* completeSound = NULL;
-		Sound* changeNoteSound = NULL;
 		Sound* gameOverSound = NULL;
 		Music* music = NULL;
 
-		//debugging dot
-		Engine::Texture* dotTexture = NULL;
-		
-		Engine::Sprite* dot = NULL;
-
-		//Sprite* dotSprite1 = NULL;
-		//Sprite* dotSprite2 = NULL;
-		//Sprite* dotSprite3 = NULL;
-		//Sprite* dotSprite4 = NULL;
 		Food* currFood = NULL;
 
 		float foodVelocity = 0.2f;

@@ -185,16 +185,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon1.ico">
-      <Filter>Shader Files</Filter>
-    </Image>
-    <Image Include="logo.ico">
-      <Filter>Shader Files</Filter>
-    </Image>
-    <Image Include="logo2.ico">
-      <Filter>Shader Files</Filter>
-    </Image>
-    <Image Include="icon.ico">
+    <Image Include="pizza.ico">
       <Filter>Shader Files</Filter>
     </Image>
   </ItemGroup>

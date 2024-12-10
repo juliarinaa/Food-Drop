@@ -30,7 +30,6 @@ namespace Engine {
 		Sprite* title = NULL;
 		Sprite* playSprite = NULL;
 		Music* music = NULL;
-		//Sprite* buttonBackground = NULL;
 		vector<Button*> buttons;
 		Text* textHighestScore;
 		int currentButtonIndex = 0;

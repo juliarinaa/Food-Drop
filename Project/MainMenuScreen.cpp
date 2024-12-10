@@ -58,8 +58,6 @@ void Engine::MainMenuScreen::Init()
 
 void Engine::MainMenuScreen::Update()
 {
-	// Set background
-	//game->SetBackgroundColor(52, 155, 235);
 
 	if (game->GetInputManager()->IsKeyReleased("next")) {
 		// Set previous button to normal state
@@ -91,7 +89,6 @@ void Engine::MainMenuScreen::Update()
 			if(!firstTime){
 				if (gameScreen) {
 					gameScreen->ResetGameState();
-
 				}
 			}
 			else { 

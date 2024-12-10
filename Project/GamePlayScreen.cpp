@@ -8,32 +8,36 @@ Engine::GamePlayScreen::GamePlayScreen()
 Engine::GamePlayScreen::~GamePlayScreen()
 {
 	delete texture;
+	delete backgroundSprite;
+	delete scoreBoardSprite;
+	delete overlayBlackTexture;
+	delete overlayBlackSprite;
+	delete overlayWhiteTexture;
+	delete overlayWhiteSprite;
+	delete notesTexture;
+	delete notesSprite;
 	delete basketTexture;
 	delete basketSprite;
+	delete scoreTitle;
 	delete scoreText;
+	delete orderTitle;
+	delete bonusScoreText;
 	delete correctSound;
 	delete wrongSound;
+	delete completeSound;
+	delete gameOverSound;
+	delete music;
+	delete currFood;
 }
 
 void Engine::GamePlayScreen::Init()
 {
 	srand(std::time(0));
 
-	//dot buat debugging aj
-	/*dotTexture = new Texture("dot.png");
-	dot = new Sprite(dotTexture, defaultSpriteShader, game->GetDefaultQuad());*/
-	/*dot->SetPosition(game->GetSettings()->screenWidth / 2, basketSprite->GetScaleHeight())*/;
-
-	/*dotSprite1 = new Sprite(dotTexture, defaultSpriteShader, game->GetDefaultQuad());
-	dotSprite2 = new Sprite(dotTexture, defaultSpriteShader, game->GetDefaultQuad());
-	dotSprite3 = new Sprite(dotTexture, defaultSpriteShader, game->GetDefaultQuad());
-	dotSprite4 = new Sprite(dotTexture, defaultSpriteShader, game->GetDefaultQuad());*/
-
 	// Sound Effect
 	correctSound = (new Sound("correct.wav"))->SetVolume(100);
 	wrongSound = (new Sound("wrong.wav"))->SetVolume(100);
 	completeSound = (new Sound("bonus point.wav"))->SetVolume(100);
-	changeNoteSound = (new Sound("flipping2.wav"))->SetVolume(100);
 	gameOverSound = (new Sound("gameover.wav"))->SetVolume(100);
 	music = (new Music("00 lolurio - Everyday Life.ogg"))->SetVolume(70);
 
@@ -335,23 +339,11 @@ void Engine::GamePlayScreen::Update()
 			}
 		}
 	}
-
-	////Shape for debug
-	//BoundingBox* bb = objects[1]->GetBoundingBox();
-	//dotSprite1->SetPosition(bb->GetVertices()[0].x - (0.5f * dotSprite1->GetScaleWidth()),
-	//	bb->GetVertices()[0].y - (0.5f * dotSprite1->GetScaleHeight()));
-	//dotSprite2->SetPosition(bb->GetVertices()[1].x - (0.5f * dotSprite2->GetScaleWidth()),
-	//	bb->GetVertices()[1].y - (0.5f * dotSprite2->GetScaleHeight()));
-	//dotSprite3->SetPosition(bb->GetVertices()[2].x - (0.5f * dotSprite3->GetScaleWidth()),
-	//	bb->GetVertices()[2].y - (0.5f * dotSprite3->GetScaleHeight()));
-	//dotSprite4->SetPosition(bb->GetVertices()[3].x - (0.5f * dotSprite4->GetScaleWidth()),
-	//	bb->GetVertices()[3].y - (0.5f * dotSprite3->GetScaleHeight()));
 }
 
 void Engine::GamePlayScreen::Draw()
 {
 	backgroundSprite->Draw();
-	//overlayBlackSprite->Draw();
 	overlayWhiteSprite->Draw();
 	notesSprite->Draw();
 	scoreBoardSprite->Draw();
@@ -377,12 +369,6 @@ void Engine::GamePlayScreen::Draw()
 			bonusScoreDuration = 1000;
 		}
 	}
-	
-	//dot->Draw();
-	//dotSprite1->Draw();
-	//dotSprite2->Draw();
-	//dotSprite3->Draw();
-	//dotSprite4->Draw();
 
 	for (Request* o : requestAssets) {
 		o->Draw();
