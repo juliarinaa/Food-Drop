@@ -1,6 +1,10 @@
 # Food Drop Game
 This project was developed as the final submission for the ‘Pemrograman Gim’ course at university, using a custom game engine provided by the lecturer, and was completed in a team of two.
 
+## The Team
+- [Julia Nur Fajrina](https://github.com/juliarinaa)
+- [Rafifah Ayu Wulandari](https://github.com/Rafiyu)
+
 ## Project Link (itch.io)
 https://juliarina.itch.io/food-drop
 
