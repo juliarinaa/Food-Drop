@@ -26,5 +26,5 @@ https://juliarina.itch.io/food-drop
 <img width="1920" height="1080" alt="Screenshot (16)" src="https://github.com/user-attachments/assets/b494c1ee-d61b-4260-b180-6f228404e04f" />
 <img width="1920" height="1080" alt="Screenshot (17)" src="https://github.com/user-attachments/assets/0a14f4b7-4348-4b03-a268-b2ad0abfda84" />
 
-## Teaser Video 
+## Game Teaser 
 [![Food Drop Game Teaser](https://img.youtube.com/vi/beW1wufL51A/0.jpg)](https://www.youtube.com/watch?v=beW1wufL51A)
